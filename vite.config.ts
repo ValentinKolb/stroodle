@@ -1,0 +1,59 @@
+import {defineConfig} from 'vite'
+import react from '@vitejs/plugin-react'
+import {VitePWA} from "vite-plugin-pwa";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        VitePWA({
+                // add this to cache all the imports
+                workbox: {
+                    globPatterns: ["**/*"],
+                },
+                // add this to cache all the
+                // static assets in the public folder
+                includeAssets: [
+                    "**/*",
+                ],
+                manifest: {
+                    "theme_color": "#cb1016",
+                    "background_color": "#000000",
+                    "display": "fullscreen",
+                    "scope": "/",
+                    "start_url": "/",
+                    "short_name": "stroodle.me",
+                    "description": "project management app",
+                    "name": "stroodle.me",
+                    "icons": [
+                        {
+                            "src": "public/icons/manifest-icon-192.maskable.png",
+                            "sizes": "192x192",
+                            "type": "image/png",
+                            "purpose": "any"
+                        },
+                        {
+                            "src": "public/icons/manifest-icon-192.maskable.png",
+                            "sizes": "192x192",
+                            "type": "image/png",
+                            "purpose": "maskable"
+                        },
+                        {
+                            "src": "public/icons/manifest-icon-512.maskable.png",
+                            "sizes": "512x512",
+                            "type": "image/png",
+                            "purpose": "any"
+                        },
+                        {
+                            "src": "public/icons/manifest-icon-512.maskable.png",
+                            "sizes": "512x512",
+                            "type": "image/png",
+                            "purpose": "maskable"
+                        }
+
+                    ],
+                },
+            }
+        ),
+    ],
+})
