@@ -9,7 +9,7 @@ function App() {
 
             <Link to="/about">About</Link>
 
-            <Text>Home</Text>
+            <Text>Home v2</Text>
 
         </Route>
 
