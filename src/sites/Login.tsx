@@ -33,13 +33,13 @@ export default function Login() {
         }
     })
 
+
     if (user != null) {
         return <Redirect to={"/"}/>
     }
 
     return (
         <Container size={420} my={40}>
-
             <Image maw={300} mx="auto" src="/logo.png" alt="Stroodle.me logo"/>
 
             <Title
