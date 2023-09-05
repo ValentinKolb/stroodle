@@ -1,3 +1,4 @@
 node_modules
-nginx
+dev-dist
+dist
 README.md
