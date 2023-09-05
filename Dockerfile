@@ -16,6 +16,8 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
+COPY nginx/mimetypes /etc/nginx/mime.types
+
 # Expose port 80 to access the app
 EXPOSE 80
 

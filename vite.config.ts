@@ -7,6 +7,11 @@ export default defineConfig({
     plugins: [
         react(),
         VitePWA({
+                registerType: 'autoUpdate',
+                devOptions: {
+                    enabled: true,
+                },
+             injectRegister: 'auto',
                 // add this to cache all the imports
                 workbox: {
                     globPatterns: ["**/*"],
@@ -17,8 +22,8 @@ export default defineConfig({
                     "**/*",
                 ],
                 manifest: {
-                    "theme_color": "#cb1016",
-                    "background_color": "#000000",
+                    "theme_color": "#339af0",
+                    "background_color": "#ffffff",
                     "display": "fullscreen",
                     "scope": "/",
                     "start_url": "/",

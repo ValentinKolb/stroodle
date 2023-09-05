@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import {registerSW} from "virtual:pwa-register";
 import {MantineProvider} from '@mantine/core';
+import {PocketProvider} from "../lib/pocketbase";
 
 const updateSW = registerSW({
     onNeedRefresh() {
@@ -14,8 +15,10 @@ const updateSW = registerSW({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-         <MantineProvider withGlobalStyles withNormalizeCSS>
-        <App/>
-         </MantineProvider>
+        <PocketProvider>
+            <MantineProvider withGlobalStyles withNormalizeCSS>
+                <App/>
+            </MantineProvider>
+        </PocketProvider>
     </React.StrictMode>,
 )

@@ -1,28 +1,22 @@
 import {Text} from '@mantine/core'
-import {Switch, Link, Route} from "wouter";
+import {Switch, Link, Route} from "wouter"
+import Login from "./sites/Login";
+import NotFound from "./sites/NotFound";
 
 function App() {
 
     return <Switch>
-
         <Route path="/">
-
-            <Link to="/about">About</Link>
-
-            <Text>Home v2</Text>
-
+            <Login/>
         </Route>
 
         <Route path="/about">
-
             <Link to="/">Home</Link>
-
             <Text>About</Text>
-
         </Route>
 
         <Route>
-            404
+           <NotFound/>
         </Route>
     </Switch>
 }
