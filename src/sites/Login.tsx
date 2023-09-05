@@ -40,7 +40,7 @@ export default function Login() {
     return (
         <Container size={420} my={40}>
 
-            <Image maw={300} mx="auto" src="public/logo.png" alt="Stroodle.me logo"/>
+            <Image maw={300} mx="auto" src="/logo.png" alt="Stroodle.me logo"/>
 
             <Title
                 mt={30}
