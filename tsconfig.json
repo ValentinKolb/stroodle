@@ -26,7 +26,8 @@
     ]
   },
   "include": [
-    "src"
+    "src",
+    "./node_modules/@types/**/*.d.ts"
   ],
   "references": [
     {

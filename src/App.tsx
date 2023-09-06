@@ -2,13 +2,22 @@ import {Text} from '@mantine/core'
 import {Switch, Link, Route} from "wouter"
 import Login from "./sites/Login";
 import NotFound from "./sites/NotFound";
-import Test from "./sites/test";
+import Register from "./sites/Register";
+import Home from "./sites/Home";
 
 function App() {
 
     return <Switch>
         <Route path="/">
+            <Home/>
+        </Route>
+
+        <Route path="/login">
             <Login/>
+        </Route>
+
+        <Route path="/register">
+            <Register/>
         </Route>
 
         <Route path="/about">
@@ -17,7 +26,7 @@ function App() {
         </Route>
 
         <Route path="/test">
-            <Test/>
+            foobar
         </Route>
 
         <Route>

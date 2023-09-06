@@ -13,7 +13,6 @@ export type UserModel = {
     email: string;
     avatar: string;
     aboutMe?: string;
-    emailNotifications: boolean;
     telephone?: string;
     terms: boolean;
     verified: boolean;

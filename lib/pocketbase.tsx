@@ -7,7 +7,7 @@ import {useInterval} from "@mantine/hooks";
 import jwtDecode from "jwt-decode";
 import {UserModel} from "../models";
 
-const BASE_URL = "https://backend.stroodle.de"
+const BASE_URL = "https://stroodle.me"
 const fiveMinutesInMs = ms("5 minutes");
 const twoMinutesInMs = ms("2 minutes");
 
@@ -42,7 +42,7 @@ const PocketData = () => {
         await pb.collection("users").authRefresh()
     }, [pb])
 
-    const register = useCallback(async (data: {}) => {
+    const register = useCallback(async (data: never) => {
         return await pb
             .collection("users")
             .create(data);
