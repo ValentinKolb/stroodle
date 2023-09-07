@@ -11,9 +11,8 @@ export type BaseModel = {
 export type UserModel = {
     username: string;
     email: string;
-    avatar: string;
+    avatar?: string;
     aboutMe?: string;
-    telephone?: string;
     terms: boolean;
     verified: boolean;
 } & BaseModel

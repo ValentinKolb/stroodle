@@ -22,7 +22,7 @@ export default function Login() {
 
     const {login, user} = usePB()
 
-    const loginForm = useForm({
+    const formValues = useForm({
         initialValues: {
             email: '',
             password: '',
@@ -31,12 +31,12 @@ export default function Login() {
 
     const loginMutation = useMutation({
         mutationFn: async (data: { email: string, password: string }) => {
-            loginForm.clearErrors()
+            formValues.clearErrors()
             await login(data.email, data.password)
         },
         onError: () => {
-            loginForm.setFieldError("email", "Falsche Email oder Passwort")
-            loginForm.setFieldError("password", "Falsche Email oder Passwort")
+            formValues.setFieldError("email", "Falsche Email oder Passwort")
+            formValues.setFieldError("password", "Falsche Email oder Passwort")
         }
     })
 
@@ -47,7 +47,7 @@ export default function Login() {
 
     return (
         <Container size={420} my={40}>
-            <Image maw={240} mx="auto" src="/logo.png" alt="Stroodle.me logo" mb={"xl"}/>
+            <Image maw={300} mx="auto" src="/man-waving.svg" alt="Man waving" mb={"xl"}/>
 
             <Box mb={"xl"}>
                 <Title
@@ -67,19 +67,19 @@ export default function Login() {
             </Box>
 
             <Paper withBorder shadow="md" p={"lg"} radius="md">
-                <form onSubmit={loginForm.onSubmit((data) => loginMutation.mutate(data))}>
+                <form onSubmit={formValues.onSubmit((data) => loginMutation.mutate(data))}>
                     <TextInput
                         label="Email"
                         placeholder="you@example.dev"
                         required
-                        {...loginForm.getInputProps("email")}
+                        {...formValues.getInputProps("email")}
                         mb={"sm"}
                     />
                     <PasswordInput
                         label="Passwort"
                         placeholder="123abc"
                         required
-                        {...loginForm.getInputProps("password")}
+                        {...formValues.getInputProps("password")}
                         mb={"lg"}
                     />
                     <Group position="apart" mb={"sm"}>

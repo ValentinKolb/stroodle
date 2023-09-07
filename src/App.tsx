@@ -4,6 +4,7 @@ import Login from "./sites/Login";
 import NotFound from "./sites/NotFound";
 import Register from "./sites/Register";
 import Home from "./sites/Home";
+import Test from "./sites/test";
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
         </Route>
 
         <Route path="/test">
-            foobar
+            <Test/>
         </Route>
 
         <Route>

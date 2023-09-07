@@ -42,10 +42,10 @@ const PocketData = () => {
         await pb.collection("users").authRefresh()
     }, [pb])
 
-    const register = useCallback(async (data: never) => {
+    const register = useCallback(async (data: Pick<UserModel, "username" | "email" | "aboutMe" | "terms"> & { password: string, passwordConfirm: string }) => {
         return await pb
             .collection("users")
-            .create(data);
+            .create({emailVisibility: false, ...data});
     }, [])
 
     const login = useCallback(async (email: string, password: string) => {
