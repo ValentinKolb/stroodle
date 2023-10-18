@@ -1,0 +1,11 @@
+:root {
+    --message-bg-color: var(--mantine-color-gray-2);
+    --message-bg-color-hover: var(--mantine-color-gray-3);
+    --message-text-color: var(--mantine-color-gray-7);
+
+    [data-author='true'] {
+        --message-bg-color: var(--mantine-color-green-5);
+        --message-bg-color-hover: var(--mantine-color-green-6);
+        --message-text-color: var(--mantine-color-gray-0);
+    }
+}

@@ -1,0 +1,33 @@
+.container {
+    border: 1px solid var(--mantine-color-gray-4);
+
+    &[data-margin="true"] {
+        margin-top: calc(var(--mantine-spacing-xs) / 2);
+    }
+
+    &[data-error="true"] {
+        margin-bottom: calc(var(--mantine-spacing-xs) / 2);
+        border-color: var(--mantine-color-red-7);
+        color: var(--mantine-color-red-7);
+    }
+}
+
+.content {
+    font-size: var(--mantine-font-size-sm);
+    overflow: auto;
+}
+
+
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    gap: var(--mantine-spacing-md);
+    padding: var(--mantine-spacing-xs);
+    border: none;
+    border-radius: 0;
+    background-color: unset;
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,25 @@
+.container {
+    border: 1px solid var(--mantine-color-gray-3);
+    border-radius: var(--mantine-radius-sm);
+    padding: var(--mantine-spacing-md);
+    position: relative;
+}
+
+.legend {
+    --legend-font-size: var(--mantine-font-size-sm);
+
+    position: absolute;
+    top: calc(-0.5 * var(--legend-font-size));
+    left: var(--mantine-spacing-lg);
+    background-color: var(--mantine-color-body);
+    font-weight: 500;
+    font-size: var(--legend-font-size);
+    line-height: 1;
+    color: var(--mantine-color-dimmed);
+
+    & > svg {
+        vertical-align: bottom;
+        height: var(--legend-font-size);
+        width: var(--legend-font-size);
+    }
+}

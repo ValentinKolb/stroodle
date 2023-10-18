@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    max-height: 100%;
+    min-height: 0;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--mantine-spacing-md);
+    align-items: flex-start;
+    padding: var(--mantine-spacing-md);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.scrollAffix {
+    position: absolute;
+
+    bottom: var(--mantine-spacing-xs);
+    right: 0;
+
+    z-index: 10; /* optional, but can help ensure it stays above other content */
+}

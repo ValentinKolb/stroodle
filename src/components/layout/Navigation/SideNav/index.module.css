@@ -1,0 +1,82 @@
+.navbar {
+    background-color: var(--mantine-color-body);
+    height: 100%;
+    padding: var(--mantine-spacing-sm) 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--mantine-color-gray-3);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        gap: var(--mantine-spacing-sm);
+    }
+}
+
+.projectsHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--mantine-spacing-sm);
+}
+
+.projectTitle {
+    font-size: var(--mantine-font-size-xs);
+    font-weight: 500;
+    color: var(--mantine-color-dimmed);
+
+    &:hover {
+        color: var(--mantine-color-blue-6);
+    }
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        font-size: var(--mantine-h1-font-size);
+        font-weight: var(--mantine-h1-font-weight);
+        line-height: var(--mantine-h1-line-height);
+        color: var(--mantine-color-blue-6) ;
+    }
+}
+
+.projectIcon {
+    --ti-size: var(--mantine-font-size-md);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        display: none;
+    }
+}
+
+.createProjectBtn {
+    @media (max-width: $mantine-breakpoint-xs) {
+        display: none;
+    }
+}
+
+.mobileFooter {
+    display: none;
+    padding: 0 var(--mantine-spacing-sm);
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        margin-top: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.desktopFooter {
+    padding: 0 var(--mantine-spacing-sm);
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        display: none;
+    }
+
+    & > button {
+        color: var(--mantine-primary-color-filled);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

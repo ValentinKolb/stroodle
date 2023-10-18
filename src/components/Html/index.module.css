@@ -1,0 +1,12 @@
+.container {
+    padding: unset;
+    margin: unset;
+
+    & > p {
+        margin-bottom: var(--mantine-spacing-sm);
+    }
+
+    & > p:last-of-type {
+        margin-bottom: 0;
+    }
+}

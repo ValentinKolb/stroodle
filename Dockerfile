@@ -16,7 +16,7 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY ./nginx/mime.types /etc/nginx/mime.types
+COPY ../vite-min-template/nginx/mime.types /etc/nginx/mime.types
 
 # Expose port 80 to access the app
 EXPOSE 80

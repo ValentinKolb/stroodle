@@ -1,0 +1,34 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-xs);
+    margin-top: auto;
+}
+
+.inputForm {
+    display: flex;
+    flex-direction: row;
+    gap: var(--mantine-spacing-xs);
+    justify-content: stretch;
+    align-items: flex-end;
+
+    & > button {
+
+    }
+}
+
+.replyTo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--mantine-spacing-xs);
+
+    &:last-child {
+        margin-left: auto;
+    }
+}
+
+.replyToText {
+    width: 100%;
+    padding: var(--mantine-spacing-xs);
+}

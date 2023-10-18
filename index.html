@@ -4,7 +4,8 @@
     <meta charset="UTF-8"/>
 
     <link rel="icon" type="image/png" href="/logo-square.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
     <title>Stroodle.me</title>
     <meta name="description" content="My Awesome App description">
@@ -73,9 +74,54 @@
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
     <link rel="apple-touch-startup-image" href="/icons/apple-splash-1136-640.jpg"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
-
 </head>
 <body>
+
+<script>
+    const isMobile = {
+        Android: function () {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function () {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function () {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function () {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function () {
+            return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+        },
+        any: function () {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    }
+
+    function throttle(func, wait) {
+        let timeout;
+        return function (...args) {
+            if (!timeout) {
+                timeout = setTimeout(() => {
+                    timeout = null;
+                    func.apply(this, args);
+                }, wait);
+            }
+        };
+    }
+
+    const handler = throttle(() => {
+        const vh = window.visualViewport?.height;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+        window.scrollTo({top: 0, behavior: "instant",})
+    }, 100)
+
+    if (isMobile.any()) {
+        window.visualViewport.addEventListener("resize", handler)
+    }
+</script>
+
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
 </body>

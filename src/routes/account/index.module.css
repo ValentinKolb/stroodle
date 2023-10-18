@@ -1,0 +1,23 @@
+.avatarContainer {
+    position: relative;
+}
+
+.avatarEditBtn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    & > * {
+        color: var(--mantine-color-white);
+    }
+}
+
+.title {
+    color: var(--mantine-color-teal-5);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-md);
+}

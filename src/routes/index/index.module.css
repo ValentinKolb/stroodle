@@ -1,0 +1,79 @@
+$mobile-breakpoint: $mantine-breakpoint-xs;
+$tablet-breakpoint: $mantine-breakpoint-md;
+
+.title {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+
+    @media (max-width: $tablet-breakpoint) {
+        font-size: 2rem;
+        text-align: center;
+    }
+}
+
+.subtitle {
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+    color: var(--mantine-color-dark-4);
+
+    @media (max-width: $tablet-breakpoint) {
+        font-size: 2rem;
+    }
+
+    @media (max-width: $mobile-breakpoint) {
+        text-align: center;
+    }
+}
+
+.container {
+    padding: var(--mantine-spacing-md);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    gap: var(--mantine-spacing-xl);
+    justify-content: center;
+    align-items: center;
+    @media (max-width: $mobile-breakpoint) {
+        align-items: flex-start;
+    }
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-md);
+    max-width: $mobile-breakpoint;
+    @media (max-width: $mobile-breakpoint) {
+        max-width: 100%;
+        align-items: center;
+    }
+}
+
+.imgMobile {
+    display: none;
+    @media (max-width: $tablet-breakpoint) {
+        display: block;
+    }
+}
+
+.imgDesktop {
+    display: block;
+    width: 400px;
+    @media (max-width: $tablet-breakpoint) {
+        display: none;
+    }
+}
+
+.btnGroup {
+    display: flex;
+    flex-direction: row;
+    gap: var(--mantine-spacing-md);
+    @media (max-width: $tablet-breakpoint) {
+        justify-content: center;
+    }
+}

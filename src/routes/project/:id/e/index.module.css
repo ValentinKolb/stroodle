@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--mantine-spacing-md);
+}
+
+.title {
+    color: var(--mantine-color-cyan-5);
+    font-size: var(--mantine-font-size-xl);
+    text-align: center;
+}
+
+.btnGroup {
+    display: flex;
+    justify-content: center;
+    gap: var(--mantine-spacing-md);
+}

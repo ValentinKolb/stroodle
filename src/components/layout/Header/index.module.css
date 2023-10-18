@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-start;
+    gap: var(--mantine-spacing-md);
+    @media (max-width: $mantine-breakpoint-xs) {
+        padding-bottom: var(--mantine-spacing-sm);
+        border-bottom: 1px solid var(--mantine-color-gray-3);
+    }
+}
+
+.rightSection {
+    margin-left: auto;
+}
+
+.title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    min-width: 0;
+}

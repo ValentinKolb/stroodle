@@ -1,0 +1,27 @@
+.searchCode {
+    font-weight: 700;
+    font-size: 10px;
+    background-color: var(--mantine-color-gray-0);
+    border: 1px solid var(--mantine-color-gray-2);
+}
+
+.inner {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.btnDesktop {
+    display: none;
+
+    @media (min-width: $mantine-breakpoint-xs) {
+        display: block;
+    }
+}
+
+.btnMobile {
+    display: block;
+
+    @media (min-width: $mantine-breakpoint-xs) {
+        display: none;
+    }
+}
