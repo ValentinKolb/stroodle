@@ -22,17 +22,21 @@ export const useCustomNavigate = () => {
     const location = useLocation()
     const {searchParamsKey, hideSideMenuBar} = useSideMenuBar()
 
-    return (to: string | number, options?: NavigateOptions) => {
+    return (to: string | number, options?: NavigateOptions & { discardFromState?: boolean }) => {
 
-        console.log(location.state)
-
-        options = {...options, replace: options?.replace ?? true, state: {...options?.state, from: location.pathname}}
+        options = {
+            ...options, replace: options?.replace ?? true, state: {
+                ...options?.state,
+                from: options?.discardFromState ? options.state : location.pathname
+            }
+        }
 
         if (to === -1 && state?.from) {
-            navigate(
-                modifyQueryParam(state.from, searchParamsKey, hideSideMenuBar.toString())
-                , options
-            )
+            if (options.discardFromState) {
+                navigate(-1)
+            } else {
+                navigate(modifyQueryParam(state.from, searchParamsKey, hideSideMenuBar.toString()), options)
+            }
             return
         }
 

@@ -4,19 +4,22 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
-RUN npm install
+RUN yarn install
 
 # Copy source code
 COPY . .
 
+# Set environment variables
+ENV NODE_ENV=production
+
 # Build the React app using Vite
-RUN npm run build
+RUN yarn run build
 
 # Stage 2: Create a lightweight production image
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY ../vite-min-template/nginx/mime.types /etc/nginx/mime.types
+COPY ./nginx/mime.types /etc/nginx/mime.types
 
 # Expose port 80 to access the app
 EXPOSE 80

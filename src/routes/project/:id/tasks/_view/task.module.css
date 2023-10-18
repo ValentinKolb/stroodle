@@ -1,0 +1,33 @@
+.link {
+    overflow: hidden;
+
+    &:hover {
+        text-decoration: underline;
+        text-decoration-color: var(--mantine-color-dimmed);
+    }
+}
+
+.container {
+    display: flex;
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    gap: var(--mantine-spacing-xs);
+    margin-bottom: var(--mantine-spacing-xs);
+}
+
+.description {
+    & > * {
+        font-size: var(--mantine-font-size-md) !important;
+        color: var(--mantine-color-dimmed) !important;
+    }
+}
+
+.date {
+    white-space: nowrap;
+    margin-left: auto;
+
+    color: var(--mantine-color-dimmed);
+    font-size: var(--mantine-font-size-sm);
+}

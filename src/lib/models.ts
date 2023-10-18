@@ -46,14 +46,14 @@ export type MessageModel = {
 } & RecordModel
 
 export type TaskModel = {
-    name: string; // 3-30 chars
     description: string; // max 500 chars
     done: boolean;
     project: string;
-    topic?: string;
     deadline?: string;
+    author: string;
     expand?: {
         project?: ProjectModel;
         topic?: TopicModel;
+        author?: UserModel;
     }
 } & RecordModel

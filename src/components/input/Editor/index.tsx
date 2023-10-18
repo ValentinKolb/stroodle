@@ -5,7 +5,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import {RichTextEditor, RichTextEditorContent} from "@mantine/tiptap";
 import classes from './index.module.css';
 import {Box, Input, InputWrapperProps, Loader} from "@mantine/core";
-import {IconLetterT, IconLetterTSmall} from "@tabler/icons-react";
 import {useEffect} from "react";
 
 
@@ -33,8 +32,10 @@ const Toolbar = ({fullToolbar}: { fullToolbar: boolean, editor: Editor }) => (
                     </RichTextEditor.ControlsGroup>
 
                     <RichTextEditor.ControlsGroup>
-                        <RichTextEditor.H3 icon={IconLetterT}/>
-                        <RichTextEditor.H4 icon={IconLetterTSmall}/>
+                        <RichTextEditor.H1/>
+                        <RichTextEditor.H2/>
+                        <RichTextEditor.H3/>
+                        <RichTextEditor.H4/>
                     </RichTextEditor.ControlsGroup>
 
                     <RichTextEditor.ControlsGroup>
@@ -84,6 +85,7 @@ export default function TextEditor({
                                        fullToolbar,
                                        maxHeight,
                                        hideToolbar,
+                                       noBorder,
                                        ...props
                                    }: {
     value: string;
@@ -92,6 +94,7 @@ export default function TextEditor({
     fullToolbar?: boolean;
     maxHeight?: number;
     hideToolbar?: boolean;
+    noBorder?: boolean;
 } & Omit<InputWrapperProps, "onChange">) {
 
     const editor = useEditor({
@@ -126,7 +129,7 @@ export default function TextEditor({
                 mod={{error: !!props.error, margin: !!props.label || !!props.description}}
                 classNames={{
                     content: `${classes.content} scrollbar`,
-                    root: `${classes.container}`,
+                    root: `${classes.container} ${noBorder ? classes.noBorder : ''}`,
                     toolbar: classes.toolbar,
                 }}
             >

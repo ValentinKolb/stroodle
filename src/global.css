@@ -66,8 +66,8 @@ em-emoji-picker {
     max-height: 30vh;
 }
 
-.ProseMirror {
-    padding: 5.5px 12px !important;
+.ProseMirror.tiptap {
+    padding: 5.5px 12px;
 }
 
 .scrollbar {

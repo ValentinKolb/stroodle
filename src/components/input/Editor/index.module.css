@@ -12,6 +12,10 @@
     }
 }
 
+.noBorder {
+    border: none;
+}
+
 .content {
     font-size: var(--mantine-font-size-sm);
     overflow: auto;

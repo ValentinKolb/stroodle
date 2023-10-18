@@ -11,6 +11,7 @@ import {IconArrowForward} from "@tabler/icons-react";
 export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HTMLProps<HTMLDivElement>>(
     ({message, ...props}, ref) => {
         const {user} = usePB();
+
         return (
             <div
                 className={`${classes.container}`}
@@ -49,7 +50,8 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                     <Html className={classes.text}>
                         {message.text}
                     </Html>
-                    <div className={classes.time}>
+
+                    <div className={classes.time} data-author={message.author === user?.id}>
                         {formateChatDate(new Date(message.created))}
                     </div>
                 </div>

@@ -10,34 +10,6 @@ import {useMobile} from "../../../../../lib/uiUtil.tsx";
 export default function ProjectLink({project}: { project: ProjectModel }) {
     const [opened, setOpened] = useState(false);
     const isMobile = useMobile()
-    const items = [
-        {
-            label: 'Übersicht',
-            link: `/project/${project.id}`
-        },
-        {
-            label: 'Nachrichten',
-            link: `/project/${project.id}/messages`
-        },
-        {
-            label: 'Todos',
-            link: `/project/${project.id}/tasks`
-        },
-        {
-            label: 'Notizen',
-            link: `/project/${project.id}/notes`
-        }
-    ].map((link) => (
-        <Text
-            component={CustomLink}
-            className={classes.link}
-            to={link.link}
-            key={link.label}
-            closeSideBar={isMobile}
-        >
-            {link.label}
-        </Text>
-    ))
 
     return (
         <>
@@ -62,7 +34,30 @@ export default function ProjectLink({project}: { project: ProjectModel }) {
                 </Group>
             </UnstyledButton>
             <Collapse in={opened}>
-                {items}
+                {[
+                    {
+                        label: 'Übersicht',
+                        link: `/project/${project.id}`
+                    },
+                    {
+                        label: 'Nachrichten',
+                        link: `/project/${project.id}/messages`
+                    },
+                    {
+                        label: 'Aufgaben',
+                        link: `/project/${project.id}/tasks`
+                    }
+                ].map((link) => (
+                    <Text
+                        component={CustomLink}
+                        className={classes.link}
+                        to={link.link}
+                        key={link.label}
+                        closeSideBar={isMobile}
+                    >
+                        {link.label}
+                    </Text>
+                ))}
             </Collapse>
         </>
     )

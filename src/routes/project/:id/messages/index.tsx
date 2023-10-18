@@ -8,7 +8,6 @@ export default function Messages({project}: { project: ProjectModel }) {
 
     return <>
         <MessageList project={project}/>
-
         <NewMessage project={project}/>
     </>
 }

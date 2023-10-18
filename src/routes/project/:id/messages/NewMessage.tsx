@@ -29,11 +29,6 @@ export default function NewMessage({project}: { project: ProjectModel }) {
     const [text, setText] = useState('')
     const [replyTo, setReplyTo] = useReplyTo()
 
-    // todo
-    // useEffect(() => {
-    //    formValues.setFieldValue('replyTo', replyTo)
-    //}, [formValues, replyTo])
-
     useHotkeys([
         ['mod+Enter', () => sendMessageMutation.mutate()],
     ], undefined, true);
@@ -42,8 +37,8 @@ export default function NewMessage({project}: { project: ProjectModel }) {
         mutationFn: async () => {
             return await pb.collection('messages').create({
                 text: cleanHtmlString(text),
-                replyTo: replyTo,
-                author: user?.id,
+                replyTo: replyTo?.id || null,
+                author: user!.id,
                 project: project.id,
                 readBy: [user?.id]
             })

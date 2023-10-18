@@ -1,0 +1,56 @@
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-md);
+    flex-grow: 1;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.affix {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-xs);
+}
+
+.list {
+    padding: 0;
+}
+
+.taskLink {
+    overflow: hidden;
+
+    &:hover {
+        text-decoration: underline;
+        text-decoration-color: var(--mantine-color-dimmed);
+    }
+}
+
+.taskContainer {
+    display: flex;
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    gap: var(--mantine-spacing-xs);
+    margin-bottom: var(--mantine-spacing-xs);
+}
+
+.taskDescription {
+    & > * {
+        font-size: var(--mantine-font-size-md) !important;
+        color: var(--mantine-color-dimmed) !important;
+    }
+}
+
+.taskDate {
+    white-space: nowrap;
+    margin-left: auto;
+
+    color: var(--mantine-color-dimmed);
+    font-size: var(--mantine-font-size-sm);
+}

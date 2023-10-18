@@ -1,7 +1,7 @@
 import {useQuery} from "@tanstack/react-query";
-import {Avatar, LoadingOverlay, Modal, Text, ThemeIcon, ThemeIconProps, Tooltip} from "@mantine/core";
+import {Avatar, LoadingOverlay, Modal, Text, ThemeIcon, ThemeIconProps, Tooltip, UnstyledButton} from "@mantine/core";
 import classes from "./index.module.css";
-import {IconEye, IconPencil,} from "@tabler/icons-react";
+import {IconEye, IconPencil, IconSearch,} from "@tabler/icons-react";
 import {ClientResponseError} from "pocketbase";
 import {useMediaQuery} from "@mantine/hooks";
 import {Outlet, Route, Routes, useLocation, useParams} from "react-router-dom";
@@ -9,7 +9,7 @@ import Messages from "./messages";
 import Tasks from "./tasks";
 import Index from "./_view";
 import {useMobile} from "../../../lib/uiUtil.tsx";
-import {BrandIconChat, BrandIconNotes, BrandIconTask} from "../../../lib/icons.tsx";
+import {BrandIconChat, BrandIconTask} from "../../../lib/icons.tsx";
 import {usePB} from "../../../lib/pocketbase.tsx";
 import {ProjectModel, UserModel} from "../../../lib/models.ts";
 import NotFound from "../../../components/NotFound.tsx";
@@ -39,7 +39,6 @@ const NavLinks = ({projectId}: { projectId: string }) => {
         },
         {label: "Nachrichten", path: "messages", icon: BrandIconChat, color: "messageColor"},
         {label: "Aufgaben", path: "tasks", icon: BrandIconTask, color: "taskColor"},
-        {label: "Notizen", path: "notes", icon: BrandIconNotes, color: "noteColor"},
     ]
 
     return <>
@@ -64,6 +63,20 @@ const NavLinks = ({projectId}: { projectId: string }) => {
                     </CustomLink>
                 ))
             }
+
+            <UnstyledButton
+                className={classes.navLink}
+            >
+                <ThemeIcon variant={"transparent"} size={isMobile ? "md" : "sm"} color={"gray"}>
+                    <IconSearch/>
+                </ThemeIcon>
+
+                {!isMobile &&
+                    <Text size={"xs"}>
+                        Suchen
+                    </Text>
+                }
+            </UnstyledButton>
         </div>
     </>
 }
@@ -142,7 +155,7 @@ export default function Project() {
 
                 <Routes location={location}>
                     <Route index element={<Index project={projectQuery.data}/>}/>
-                    <Route path="tasks" element={<Tasks project={projectQuery.data}/>}/>
+                    <Route path="tasks/*" element={<Tasks project={projectQuery.data}/>}/>
                     <Route path="messages" element={<Messages project={projectQuery.data}/>}/>
 
                     <Route path="e/desc" element={

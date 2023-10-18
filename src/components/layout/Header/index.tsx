@@ -23,7 +23,7 @@ export default function Header({label, href, leftSection, rightSection}: {
             {isMobile &&
                 <ActionIcon
                     aria-label={"open side menu"}
-                    onClick={() => navigate(-1, {replace: false})}
+                    onClick={() => navigate(-1, {replace: false, discardFromState: true})}
                     variant="transparent"
                     size={"lg"}
 
