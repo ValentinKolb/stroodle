@@ -1,5 +1,5 @@
 # Stage 1: Build the React app using Vite
-FROM node:16 AS build
+FROM node:18 AS build
 WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
