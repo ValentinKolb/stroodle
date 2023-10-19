@@ -6,30 +6,11 @@ import {useState} from "react";
 import classes from './index.module.css';
 import {useParams} from "react-router-dom";
 import {usePB} from "../../../../lib/pocketbase.tsx";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import {ProjectModel, TaskModel} from "../../../../lib/models.ts";
 import {useCustomNavigate} from "../Custom/util.ts";
 import Html from '../../../Html/index.tsx';
 
-const newMsgAction = (msg?: string) => ({
-    id: 'newMsg',
-    description: <span className={classes.group}>
-        <Kbd size={"xs"}>{">"}</Kbd> {msg || "Nachricht"}
-    </span>,
-    label: 'Nachricht schreiben',
-    onClick: () => console.log('newMsg'),
-    leftSection: IconMessagePlus
-})
-
-const newTaskAction = (task?: string) => ({
-    id: 'newTask',
-    description: <span className={classes.group}>
-        <Kbd size={"xs"}>{"-"}</Kbd> {task || "Aufgabe"}
-    </span>,
-    label: 'Aufgabe erstellen',
-    onClick: () => console.log('newMsg'),
-    leftSection: IconSquarePlus,
-})
 
 export default function ActionSearch() {
 
@@ -37,7 +18,7 @@ export default function ActionSearch() {
 
     const {projectId} = useParams() as { projectId?: string }
 
-    const {pb} = usePB()
+    const {pb, user} = usePB()
     const navigate = useCustomNavigate()
 
     const parseMsg = {
@@ -72,7 +53,44 @@ export default function ActionSearch() {
         retry: false
     })
 
-    // todo create actions from search results
+    const sendMessagesMutation = useMutation({
+        mutationFn: async () => {
+            return await pb.collection('messages').create({
+                author: user!.id,
+                text: `<p>${parseMsg.data}</p>`,
+                project: projectId,
+            })
+        }
+    })
+
+    const createTaskMutation = useMutation({
+        mutationFn: async () => {
+            return await pb.collection('tasks').create({
+                description: `<p>${parseTask.data}</p>`,
+                project: projectId,
+            })
+        }
+    })
+
+    const newMsgAction = (msg?: string) => ({
+        id: 'newMsg',
+        description: <span className={classes.group}>
+        <Kbd size={"xs"}>{">"}</Kbd> {msg || "Nachricht"}
+    </span>,
+        label: 'Nachricht schreiben',
+        onClick: sendMessagesMutation.mutate,
+        leftSection: IconMessagePlus
+    })
+
+    const newTaskAction = (task?: string) => ({
+        id: 'newTask',
+        description: <span className={classes.group}>
+        <Kbd size={"xs"}>{"-"}</Kbd> {task || "Aufgabe"}
+    </span>,
+        label: 'Aufgabe erstellen',
+        onClick: createTaskMutation.mutate,
+        leftSection: IconSquarePlus,
+    })
 
     const actions = []
     if (projectId) {
@@ -96,7 +114,7 @@ export default function ActionSearch() {
     const items = actions
         .map((item) => (
             <Spotlight.Action
-                key={item.id} onClick={item.onClick}
+                key={item.id} onClick={() => item.onClick()}
                 className={classes.searchResultContainer}
             >
                 {<item.leftSection style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}

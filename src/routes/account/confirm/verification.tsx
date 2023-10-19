@@ -11,16 +11,16 @@ export default function Verification() {
     const {token} = useParams()
     const {pb, refresh, user} = usePB()
 
-
     // query to verify the token automatically if it is present
     const verifyQuery = useQuery({
         queryKey: ['verify', token],
         queryFn: async () => {
             await pb.collection('users').confirmVerification(token || "")
             await refresh()
+            return true
         },
         retry: false,
-        enabled: !!token,
+        enabled: token !== undefined,
     })
 
     // mutation to resend the verification email
@@ -51,7 +51,7 @@ export default function Verification() {
         })}
     >
         {/*Display loading overlay is the query is loading*/}
-        <LoadingOverlay visible={verifyQuery.isPending}/>
+        <LoadingOverlay visible={verifyQuery.isPending && token !== undefined}/>
         <Box
             p={"lg"}
             style={(theme) => ({
@@ -65,7 +65,7 @@ export default function Verification() {
             })}
         >
             { /* case no token, prompt user to check email for link */
-                token === null && <>
+                token === undefined && <>
                     <Image maw={300} mx="auto" src="/man-waving.svg" alt="Man waving" mb={"xl"}/>
                     <Text
                         size="xl"

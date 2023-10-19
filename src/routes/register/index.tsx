@@ -118,6 +118,7 @@ export default function Register() {
                 flexDirection: "column",
                 alignItems: "center",
             })}
+            className={"scrollbar"}
         >
             <Image maw={200} mx="auto" src="/woman-waving.svg" alt="Man waving" mb={"xl"}/>
 
