@@ -13,7 +13,8 @@
     align-items: flex-end;
 
     & > button {
-
+        margin-bottom: 3px;
+        background-color: unset;
     }
 }
 

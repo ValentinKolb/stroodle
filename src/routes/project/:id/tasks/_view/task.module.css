@@ -31,3 +31,15 @@
     color: var(--mantine-color-dimmed);
     font-size: var(--mantine-font-size-sm);
 }
+
+.delete {
+    color: var(--mantine-color-red-4);
+
+    &:hover {
+        color: var(--mantine-color-red-8);
+    }
+
+    &[data-add-margin = "true"] {
+        margin-left: auto;
+    }
+}

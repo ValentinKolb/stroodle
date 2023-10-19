@@ -1,22 +1,42 @@
 import {NavLink, NavLinkProps, useLocation} from "react-router-dom";
 import {useSideMenuBar} from "../../../../lib/uiUtil.tsx";
 import {modifyQueryParam} from "./util.ts";
+import {forwardRef} from "react";
 
-export function CustomLink({closeSideBar, ...props}: { closeSideBar?: boolean } & NavLinkProps) {
+type CustomLinkProps = {
+    closeSideBar?: boolean,
+    discardFromState?: boolean
+} & NavLinkProps;
 
-    const {searchParamsKey, hideSideMenuBar} = useSideMenuBar()
-    const location = useLocation()
+export const CustomLink = forwardRef<HTMLAnchorElement, CustomLinkProps>(
+    ({closeSideBar, ...props}, ref) => {
 
-    return <NavLink
-        preventScrollReset={true}
-        {...props}
-        to={
-            modifyQueryParam(
-                props.to as string,
-                searchParamsKey,
-                closeSideBar ? "true" : hideSideMenuBar.toString())
+        const {searchParamsKey, hideSideMenuBar} = useSideMenuBar();
+        const location = useLocation();
+
+        const state = {
+            ...props.state,
+            from: props.discardFromState ? props.state.from : location.pathname + location.search + location.hash
         }
-        state={{...props.state, from: location.pathname + location.search + location.hash}}
-        replace={closeSideBar ? false : (props.replace ?? true)}
-    />
-}
+
+        return (
+            <NavLink
+                preventScrollReset={true}
+                {...props}
+                to={
+                    modifyQueryParam(
+                        props.to as string,
+                        searchParamsKey,
+                        closeSideBar ? "true" : hideSideMenuBar.toString()
+                    )
+                }
+                state={state}
+                replace={closeSideBar ? false : (props.replace ?? true)}
+                ref={ref} // Passing the ref down to NavLink
+            />
+        );
+    }
+)
+
+CustomLink.displayName = "CustomLink";
+

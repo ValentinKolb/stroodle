@@ -1,140 +1,142 @@
-import {ActionIcon, Badge, Button, Code, Group, Kbd, rem, Text} from '@mantine/core';
+import {ActionIcon, Button, Code, Kbd, rem, Text} from '@mantine/core';
 import '@mantine/spotlight/styles.css';
 import {Spotlight, spotlight} from '@mantine/spotlight';
-import {
-    IconForklift,
-    IconHash,
-    IconLogout,
-    IconMessagePlus,
-    IconPencilPlus,
-    IconSearch,
-    IconTextPlus,
-    IconUser,
-    IconUsersGroup,
-    TablerIconsProps
-} from '@tabler/icons-react';
-import {ReactElement, ReactNode, useState} from "react";
+import {IconForklift, IconMessagePlus, IconSearch, IconSquareCheck, IconSquarePlus} from '@tabler/icons-react';
+import {useState} from "react";
 import classes from './index.module.css';
+import {useParams} from "react-router-dom";
+import {usePB} from "../../../../lib/pocketbase.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {ProjectModel, TaskModel} from "../../../../lib/models.ts";
+import {useCustomNavigate} from "../Custom/util.ts";
+import Html from '../../../Html/index.tsx';
 
-const actions: {
-    group: string;
-    actions: {
-        id: string;
-        label: ReactNode
-        description: ReactNode
-        onClick: () => void
-        leftSection: (props: TablerIconsProps) => ReactElement<TablerIconsProps>
-    }[]
-}[] = [
-    {
-        group: 'Erstelle ...',
-        actions: [
+const newMsgAction = (msg?: string) => ({
+    id: 'newMsg',
+    description: <span className={classes.group}>
+        <Kbd size={"xs"}>{">"}</Kbd> {msg || "Nachricht"}
+    </span>,
+    label: 'Nachricht schreiben',
+    onClick: () => console.log('newMsg'),
+    leftSection: IconMessagePlus
+})
 
-            {
-                id: 'newMsg',
-                description: <Group gap={"xs"}>
-                    <Kbd size={"xs"}>{"@"}</Kbd>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconUsersGroup style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconHash style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="light" color="green" radius="sm">Nachricht</Badge>
-                </Group>,
-                label: 'Nachricht schreiben',
-                onClick: () => console.log('newMsg'),
-                leftSection: IconMessagePlus,
-            },
-            {
-                id: 'newTodo',
-                description: <Group gap={"xs"}>
-                    <Kbd size={"xs"}>{"-"}</Kbd>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconUsersGroup style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconHash style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="light" color="green" radius="sm">Todo</Badge>
-                </Group>,
-                label: 'Neues Todo anlegen',
-                onClick: () => console.log('newTodo'),
-                leftSection: IconPencilPlus,
-            },
-            {
-                id: 'newNote',
-                description: <Group gap={"xs"}>
-                    <Kbd size={"xs"}>{"$"}</Kbd>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconUsersGroup style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="outline" color="gray" size="md" radius="sm"
-                           leftSection={<IconHash style={{width: rem(12), height: rem(12)}}/>}>{"..."}</Badge>
-                    <Badge variant="light" color="green" radius="sm">Notiz</Badge>
-                </Group>,
-                label: 'Neue Notiz erstellen',
-                onClick: () => console.log('newNote'),
-                leftSection: IconTextPlus,
-            }
-        ],
-    },
-
-    {
-        group: 'Navigiere zu ...',
-        actions: [{
-            id: 'projects',
-            label: 'Projekte',
-            description: 'Projekte anlegen, bearbeiten, löschen',
-            onClick: () => console.log('projects'),
-            leftSection: IconForklift,
-        },
-            {
-                id: 'account',
-                label: 'Account',
-                description: 'Account bearbeiten',
-                onClick: () => console.log('account'),
-                leftSection: IconUser,
-            }
-        ],
-    },
-
-    {
-        group: 'Aktivitäten ...',
-        actions: [
-            {
-                id: 'logout',
-                label: 'Ausloggen',
-                description: 'Auf diesem Gerät ausloggen',
-                onClick: () => console.log('Documentation'),
-                leftSection: IconLogout,
-            }]
-    },
-];
+const newTaskAction = (task?: string) => ({
+    id: 'newTask',
+    description: <span className={classes.group}>
+        <Kbd size={"xs"}>{"-"}</Kbd> {task || "Aufgabe"}
+    </span>,
+    label: 'Aufgabe erstellen',
+    onClick: () => console.log('newMsg'),
+    leftSection: IconSquarePlus,
+})
 
 export default function ActionSearch() {
 
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState('')
+
+    const {projectId} = useParams() as { projectId?: string }
+
+    const {pb} = usePB()
+    const navigate = useCustomNavigate()
+
+    const parseMsg = {
+        match: query.match(/^>\s*(.*)/),
+        data: query.replace(/^>\s*/, "")
+    }
+
+    const parseTask = {
+        match: query.match(/^-\s*(.*)/),
+        data: query.replace(/^-\s*/, "")
+    }
+
+    const searchProjectQuery = useQuery({
+        queryKey: ['search', 'project', query],
+        queryFn: async () => {
+            return (await pb.collection('projects').getList<ProjectModel>(1, 5, {
+                filter: `name ~ "${query}"`,
+            })).items
+        },
+        enabled: query.length > 0,
+        retry: false
+    })
+
+    const searchTaskQuery = useQuery({
+        queryKey: ['search', 'task', query],
+        queryFn: async () => {
+            return (await pb.collection('tasks').getList<TaskModel>(1, 5, {
+                filter: `description ~ "${query}"`,
+            })).items
+        },
+        enabled: query.length > 0,
+        retry: false
+    })
+
+    // todo create actions from search results
+
+    const actions = []
+    if (projectId) {
+        if (parseMsg.match) {
+            actions.push(
+                newMsgAction(parseMsg.data)
+            )
+        } else if (parseTask.match) {
+            actions.push(
+                newTaskAction(parseTask.data)
+            )
+        } else if (query.length === 0) {
+            actions.push(newMsgAction())
+            actions.push(newTaskAction())
+        } else {
+            searchProjectQuery.refetch()
+            searchTaskQuery.refetch()
+        }
+    }
 
     const items = actions
-        .map((group) => (
-            <Spotlight.ActionsGroup key={group.group} label={group.group}>
-                {group.actions
-                    .map((item) => (
-                        <Spotlight.Action key={item.id} onClick={item.onClick}>
-                            <Group wrap="nowrap" w="100%">
-                                {<item.leftSection style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
+        .map((item) => (
+            <Spotlight.Action
+                key={item.id} onClick={item.onClick}
+                className={classes.searchResultContainer}
+            >
+                {<item.leftSection style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
 
-                                <div style={{flex: 1}}>
-                                    <Text>{item.label}</Text>
-
-                                    {item.description && (
-                                        <Text opacity={0.6} size="xs">
-                                            {item.description}
-                                        </Text>
-                                    )}
-                                </div>
-                            </Group>
-                        </Spotlight.Action>
-                    ))
-                }
-            </Spotlight.ActionsGroup>
+                {item.description && (
+                    <Text opacity={0.6} size="xs">
+                        {item.description}
+                    </Text>
+                )}
+            </Spotlight.Action>
         ))
+
+    const projectSearchResults = (searchProjectQuery.data || []).map((project: ProjectModel) => (
+        <Spotlight.Action
+            key={project.id}
+            onClick={
+                () => navigate(`/project/${project.id}`)
+            }
+            className={classes.searchResultContainer}
+        >
+            {<IconForklift style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
+            <Html className={`${classes.searchResult} one-line`}>{project.name}</Html>
+        </Spotlight.Action>
+    ))
+
+    const taskSearchResults = (searchTaskQuery.data || []).map((task: TaskModel) => (
+        <Spotlight.Action
+            key={task.id}
+            onClick={
+                () => navigate(`/project/${task.project}/tasks/${task.id}`)
+            }
+            className={classes.searchResultContainer}
+        >
+            {<IconSquareCheck style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
+            <Html className={`${classes.searchResult} one-line`}>{task.description}</Html>
+        </Spotlight.Action>
+    ))
+
+
+    const spotlightResults = [...items, ...projectSearchResults, ...taskSearchResults]
 
     return (
         <>
@@ -162,8 +164,9 @@ export default function ActionSearch() {
 
             <Spotlight.Root query={query} onQueryChange={setQuery}>
                 <Spotlight.Search placeholder="Suchen..." leftSection={<IconSearch stroke={1.5}/>}/>
-                <Spotlight.ActionsList>
-                    {items.length > 0 ? items : <Spotlight.Empty>Keine Ergebnisse...</Spotlight.Empty>}
+                <Spotlight.ActionsList className={classes.actionList}>
+                    {spotlightResults.length > 0 ? spotlightResults :
+                        <Spotlight.Empty>Keine Ergebnisse...</Spotlight.Empty>}
                 </Spotlight.ActionsList>
             </Spotlight.Root>
         </>

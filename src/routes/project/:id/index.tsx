@@ -21,6 +21,7 @@ import EditProjectMembers from "./e/Members.tsx";
 import EditProjectDescription from "./e/Description.tsx";
 import {CustomLink} from "../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import {useCustomNavigate} from "../../../components/layout/Navigation/Custom/util.ts";
+import {openSpotlight} from "@mantine/spotlight";
 
 
 /**
@@ -52,7 +53,7 @@ const NavLinks = ({projectId}: { projectId: string }) => {
                     >
                         {({isActive}) => (
                             <>
-                                <link.icon size={isMobile ? "md" : "sm"} color={isActive ? link.color : "gray"}/>
+                                <link.icon size={isMobile ? "sm" : "sm"} color={isActive ? link.color : "gray"}/>
                                 {!isMobile &&
                                     <Text size={"xs"} c={isActive ? link.color : ""}>
                                         {link.label}
@@ -66,8 +67,11 @@ const NavLinks = ({projectId}: { projectId: string }) => {
 
             <UnstyledButton
                 className={classes.navLink}
+                onClick={() => {
+                    openSpotlight()
+                }}
             >
-                <ThemeIcon variant={"transparent"} size={isMobile ? "md" : "sm"} color={"gray"}>
+                <ThemeIcon variant={"transparent"} size={isMobile ? "sm" : "sm"} color={"gray"}>
                     <IconSearch/>
                 </ThemeIcon>
 

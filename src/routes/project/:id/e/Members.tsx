@@ -2,11 +2,12 @@ import {ProjectModel, UserViewModel} from "../../../../lib/models.ts";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import {queryClient} from "../../../../main.tsx";
 import classes from "./index.module.css";
-import {Box, Button} from "@mantine/core";
+import {Box} from "@mantine/core";
 import UserSearch from "../../../../components/input/UserSearch.tsx";
 import {useForm} from "@mantine/form";
 import {useMutation} from "@tanstack/react-query";
 import {useCustomNavigate} from "../../../../components/layout/Navigation/Custom/util.ts";
+import {useEffect} from "react";
 
 export default function EditProjectMembers({project}: { project: ProjectModel }) {
 
@@ -32,9 +33,12 @@ export default function EditProjectMembers({project}: { project: ProjectModel })
         }
     })
 
-    return <form
+    useEffect(() => {
+        editMembersMutation.mutate()
+    }, [formValues.values.members, editMembersMutation]);
+
+    return <div
         className={classes.container}
-        onSubmit={formValues.onSubmit(() => editMembersMutation.mutate())}
     >
 
         <div className={classes.title}>
@@ -47,23 +51,5 @@ export default function EditProjectMembers({project}: { project: ProjectModel })
                 setSelectedUsers={(users) => formValues.setFieldValue('members', users)}
             />
         </Box>
-        <div className={classes.btnGroup}>
-            <Button
-                onClick={close}
-                variant={"subtle"}
-                color={"orange"}
-                loading={editMembersMutation.isPending}
-            >
-                Abbrechen
-            </Button>
-            <Button
-                variant={"subtle"}
-                color={"green"}
-                type={"submit"}
-                loading={editMembersMutation.isPending}
-            >
-                Speichern
-            </Button>
-        </div>
-    </form>
+    </div>
 }

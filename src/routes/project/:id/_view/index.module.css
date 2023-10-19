@@ -1,6 +1,19 @@
-.stack {
+.list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listItem {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: var(--mantine-spacing-md);
+    gap: var(--mantine-spacing-xs);
+    margin-bottom: var(--mantine-spacing-xs);
+}
+
+.username {
+    font-weight: 500;
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-dimmed);
+    line-height: 1;
 }

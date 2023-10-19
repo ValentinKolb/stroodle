@@ -1,62 +1,32 @@
 import {ProjectModel, TaskModel} from "../../../../../lib/models.ts";
-import {useEditor} from "@tiptap/react";
-import {StarterKit} from "@tiptap/starter-kit";
-import {Underline} from "@tiptap/extension-underline";
-import {RichTextEditor, RichTextEditorContent} from "@mantine/tiptap";
-import classes from "./index.module.css";
-import {useMutation} from "@tanstack/react-query";
+import {useParams} from "react-router-dom";
 import {usePB} from "../../../../../lib/pocketbase.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {Loader} from "@mantine/core";
+import NotFound from "../../../../../components/NotFound.tsx";
+import TaskEditor from "./TaskEditor.tsx";
 
-export default function EditTask({task}: { project: ProjectModel, task: TaskModel }) {
-
+export default function EditTask({project}: { project: ProjectModel }) {
+    const params = useParams()
     const {pb} = usePB()
 
-    const updateTaskMutation = useMutation({
-        mutationFn: async ({description}: { description: string }) => {
-            return await pb.collection('tasks').update(task.id, {description})
-        }
-    })
+    const taskId = params.taskId as string
 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-        ],
-        content: task.description,
-        onUpdate: ({editor}) => {
-            updateTaskMutation.mutate({
-                description: editor.getHTML()
-            })
-        }
-    })
-
-    /*
-    useSubscription<TaskModel>({
-            idOrName: "tasks",
-            callback: (event) => {
-                if (!editor || event.record.id !== task.id) return;
-                const value = event.record.description
-                if (editor.getHTML() === value) return
-                const {from, to} = editor.state.selection
-                editor.commands.setContent(value, false)
-                editor.commands.setTextSelection({from, to})
-                queryClient.invalidateQueries({queryKey: ["project", task.project, "tasks", task.id]})
-            }
+    const taskQuery = useQuery({
+        queryKey: ["project", project.id, "tasks", taskId],
+        queryFn: async () => {
+            return await pb.collection('tasks').getOne<TaskModel>(taskId)
         },
-        [editor, task])
-     */
+        enabled: !!taskId
+    })
 
-    return <>
-        <div className={`scrollbar`}>
-            <RichTextEditor
-                editor={editor}
-                classNames={{
-                    content: `${classes.content}`,
-                    root: `${classes.root}`,
-                }}
-            >
-                <RichTextEditorContent/>
-            </RichTextEditor>
-        </div>
-    </>
+    if (taskQuery.isLoading) {
+        return <Loader/>
+    }
+
+    if (taskQuery.isError) {
+        return <NotFound text={"Aufgabe nicht gefunden"}/>
+    }
+
+    return <TaskEditor project={project} task={taskQuery.data!}/>
 }

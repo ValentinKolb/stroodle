@@ -5,7 +5,7 @@ import {useMutation} from "@tanstack/react-query";
 import {queryClient} from "../../../../../main.tsx";
 import classes from "./task.module.css";
 import {ActionIcon, Text} from "@mantine/core";
-import {IconSquare, IconSquareCheck, IconSquareFilled} from "@tabler/icons-react";
+import {IconSquare, IconSquareCheck, IconSquareFilled, IconTrash} from "@tabler/icons-react";
 import {CustomLink} from "../../../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import Html from "../../../../../components/Html";
 import {formatTaskDate} from "../../../../../lib/dateUtil.ts";
@@ -23,6 +23,13 @@ export default function Task({task}: { task: TaskModel }) {
         },
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["project", task.project, "tasks"]}),
         onSettled: () => setTaskIsUpdating(false)
+    })
+
+    const deleteTaskMutation = useMutation({
+        mutationFn: async () => {
+            await pb.collection('tasks').delete(task.id)
+        },
+        onSuccess: () => queryClient.invalidateQueries({queryKey: ["project", task.project, "tasks"]})
     })
 
     return <>
@@ -53,6 +60,17 @@ export default function Task({task}: { task: TaskModel }) {
                     {formatTaskDate(new Date(task.deadline))}
                 </Text>
             }
+
+            <ActionIcon
+                aria-label={"delete"}
+                onClick={() => deleteTaskMutation.mutate()}
+                variant={"transparent"}
+                data-add-margin={!task.deadline}
+                className={classes.delete}
+                size={"xs"}
+            >
+                <IconTrash/>
+            </ActionIcon>
         </li>
     </>
 }

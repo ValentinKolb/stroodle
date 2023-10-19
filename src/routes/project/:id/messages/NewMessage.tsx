@@ -4,7 +4,7 @@ import TextEditor, {cleanHtmlString} from "../../../../components/input/Editor";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import {useHotkeys} from "@mantine/hooks";
 import {ActionIcon, ThemeIcon, Tooltip} from "@mantine/core";
-import {IconArrowForward, IconPaperclip, IconSend, IconX} from "@tabler/icons-react";
+import {IconArrowForward, IconSend, IconX} from "@tabler/icons-react";
 import {scrollToMessage} from "./util.ts";
 import Html from "../../../../components/Html";
 import classes from "./newMessage.module.css";
@@ -86,14 +86,6 @@ export default function NewMessage({project}: { project: ProjectModel }) {
                     e.preventDefault()
                     sendMessageMutation.mutate()
                 }}>
-
-                <ActionIcon
-                    variant={"transparent"}
-                    aria-label={"Options"}
-                    color={"gray"}
-                >
-                    <IconPaperclip/>
-                </ActionIcon>
 
                 <TextEditor
                     style={{flex: 1}}

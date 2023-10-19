@@ -1,11 +1,59 @@
 .root {
-    border: 1px solid red;
-    border-radius: 0;
-    height: 100%;
+    border: unset;
 }
 
-.content {
-    & > * {
-        padding: 0 !important;
+.editorContainer {
+    flex-grow: 1;
+    border-radius: var(--mantine-radius-sm);
+    transition: all 0.1s ease-out;
+    &:hover {
+        box-shadow: var(--mantine-shadow-sm);
+    }
+}
+
+.menuBarContainer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--mantine-spacing-xs);
+}
+
+.iconGroup {
+    display: flex;
+
+    & > .icon {
+        border-radius: 0;
+    }
+
+    & > .icon:not(:last-child) {
+        border-right: none;
+    }
+
+    & > .icon:first-child {
+        border-top-left-radius: var(--mantine-radius-sm);
+        border-bottom-left-radius: var(--mantine-radius-sm);
+    }
+
+    & > .icon:last-child {
+        border-top-right-radius: var(--mantine-radius-sm);
+        border-bottom-right-radius: var(--mantine-radius-sm);
+    }
+}
+
+.icon {
+
+    border: 1px solid var(--mantine-color-cyan-5);
+
+    color: var(--mantine-color-cyan-5);
+    background-color: unset;
+
+    &[data-active="true"] {
+        color: var(--mantine-color-white);
+        background-color: var(--mantine-color-cyan-5);
+    }
+
+    @media (max-width: $mantine-breakpoint-xs) {
+        --ai-size: 20px;
     }
 }

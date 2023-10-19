@@ -6,6 +6,10 @@
     min-height: 100%;
     max-width: 100%;
     min-width: 100%;
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        gap: var(--mantine-spacing-sm);
+    }
 }
 
 .navLinkContainer {

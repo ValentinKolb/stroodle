@@ -29,7 +29,7 @@ const EditUserAvatar = () => {
         },
         onSuccess: async () => {
             await refresh()
-            navigate("/account", )
+            navigate("/account", {discardFromState: true})
         }
     })
 
@@ -83,7 +83,7 @@ const EditUserAvatar = () => {
                         leftSection={<IconX/>}
                         variant={"subtle"}
                         c={"red"}
-                        onClick={() => navigate("/account")}
+                        onClick={() => navigate("/account", {discardFromState: true})}
                     >
                         Abbrechen
                     </Button>

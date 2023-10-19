@@ -1,7 +1,7 @@
 import {createContext, DependencyList, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from "react"
 import PocketBase, {RecordSubscription} from 'pocketbase'
 import ms from "ms";
-import {useInterval} from "@mantine/hooks";
+import {useIdle, useInterval} from "@mantine/hooks";
 import jwtDecode from "jwt-decode";
 import {UserModel} from "./models.ts";
 
@@ -13,7 +13,8 @@ export type PocketbaseError = { response: { data: { [key: string]: { message: st
 const PocketContext = createContext({})
 
 const PocketData = (baseUrl: string) => {
-    const pb = useMemo(() => new PocketBase(baseUrl), []);
+    const pb = useMemo(() => new PocketBase(baseUrl), [baseUrl])
+    const idle = useIdle(2000, {initialState: false})
 
     const [token, setToken] = useState(pb.authStore.token);
     const [user, setUser] = useState(pb.authStore.model);
@@ -23,11 +24,16 @@ const PocketData = (baseUrl: string) => {
             setToken(token)
             setUser(model)
         });
-    }, [])
+    }, [pb])
 
     const refreshUser = useCallback(async () => {
         await pb.collection("users").authRefresh()
     }, [pb])
+
+    useEffect(() => {
+        if (!idle) return
+        refreshUser()
+    }, [refreshUser, idle])
 
     const register = useCallback(async (data: Pick<UserModel, "username" | "email" | "aboutMe" | "terms" | "jobTitle"> & {
         password: string,
@@ -36,16 +42,16 @@ const PocketData = (baseUrl: string) => {
         return await pb
             .collection("users")
             .create({emailVisibility: false, ...data});
-    }, [])
+    }, [pb])
 
     const loginWithPassword = useCallback(async (email: string, password: string) => {
         return await pb.collection("users").authWithPassword(email, password);
-    }, [])
+    }, [pb])
 
 
     const logout = useCallback(() => {
         pb.authStore.clear();
-    }, [])
+    }, [pb])
 
     const refreshSession = useCallback(async () => {
         if (!pb.authStore.isValid) return;
@@ -55,7 +61,7 @@ const PocketData = (baseUrl: string) => {
         if (tokenExpiration < expirationWithBuffer) {
             await pb.collection("users").authRefresh();
         }
-    }, [token]);
+    }, [pb, token]);
 
     const useSubscription = <T, >({idOrName, topic = "*", callback}: {
         idOrName: string,

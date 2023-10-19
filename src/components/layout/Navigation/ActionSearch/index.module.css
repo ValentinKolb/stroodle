@@ -25,3 +25,42 @@
         display: none;
     }
 }
+
+.group {
+    display: flex;
+    align-items: center;
+    gap: var(--mantine-spacing-xs);
+}
+
+.searchResultContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--mantine-spacing-xs);
+    max-width: 100%;
+}
+
+.searchResult {
+    min-width: 0;
+    max-width: 100%;
+
+    & > * {
+        font-size: var(--mantine-font-size-md) !important;
+        font-weight: 400;
+        color: var(--mantine-color-dimmed);
+    }
+}
+
+.actionList {
+
+    & > * {
+        max-width: 100% !important;
+
+        & > * {
+            & > * {
+                & > * {
+                    display: block !important;
+                }
+            }
+        }
+    }
+}

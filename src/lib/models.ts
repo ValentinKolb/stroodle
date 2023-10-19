@@ -50,10 +50,8 @@ export type TaskModel = {
     done: boolean;
     project: string;
     deadline?: string;
-    author: string;
     expand?: {
         project?: ProjectModel;
         topic?: TopicModel;
-        author?: UserModel;
     }
 } & RecordModel

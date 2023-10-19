@@ -32,7 +32,7 @@ const EditUserPassword = () => {
         ),
         onSuccess: async () => {
             await refresh()
-            navigate("/account")
+            navigate("/account", {discardFromState: true})
         }
     })
 
@@ -84,7 +84,7 @@ const EditUserPassword = () => {
                 leftSection={<IconX/>}
                 variant={"subtle"}
                 color={"red"}
-                onClick={() => navigate("/account")}
+                onClick={() => navigate("/account", {discardFromState: true})}
             >
                 Abbrechen
             </Button>

@@ -14,7 +14,7 @@ import Task from "./Task.tsx";
 
 const CreateTaskForm = ({projectId, close}: { projectId: string, close: () => void }) => {
 
-    const {pb, user} = usePB()
+    const {pb} = usePB()
 
     const formValues = useForm({
         initialValues: {
@@ -30,7 +30,6 @@ const CreateTaskForm = ({projectId, close}: { projectId: string, close: () => vo
                 deadline: formValues.values.deadline,
                 done: false,
                 project: projectId,
-                author: user!.id
             })
         },
         onSuccess: () => {

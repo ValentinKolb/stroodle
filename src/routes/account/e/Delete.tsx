@@ -19,7 +19,7 @@ const DeleteUser = () => {
         ),
         onSuccess: async () => {
             await refresh()
-            navigate("/register")
+            navigate("/register" , {discardFromState: true})
         }
     })
 
@@ -69,7 +69,7 @@ const DeleteUser = () => {
                 leftSection={<IconCheck/>}
                 variant={"subtle"}
                 color={"green"}
-                onClick={() => navigate("/account")}
+                onClick={() => navigate("/account", {discardFromState: true})}
             >
                 Abbrechen
             </Button>

@@ -51,8 +51,7 @@ export const useCustomNavigate = () => {
         }
 
         navigate(
-            modifyQueryParam(to, searchParamsKey, hideSideMenuBar.toString())
-            , options
+            modifyQueryParam(to, searchParamsKey, hideSideMenuBar.toString()), options
         )
     }
 }

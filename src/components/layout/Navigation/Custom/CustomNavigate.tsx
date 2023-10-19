@@ -2,7 +2,7 @@ import {Navigate, NavigateProps} from "react-router-dom";
 import {useSideMenuBar} from "../../../../lib/uiUtil.tsx";
 import {modifyQueryParam} from "./util.ts";
 
-export function CustomNavigate(props: NavigateProps) {
+export function CustomNavigate(props: NavigateProps ) {
 
     const {searchParamsKey, hideSideMenuBar} = useSideMenuBar()
 
