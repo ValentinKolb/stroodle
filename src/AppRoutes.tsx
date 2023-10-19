@@ -12,9 +12,8 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 import Navigation from "./components/layout/Navigation";
 import {LoadingOverlay} from "@mantine/core";
 import NotFound from "./components/NotFound.tsx";
-import Header from "./components/layout/Header";
-import {IconForklift} from "@tabler/icons-react";
 import {CustomNavigate} from "./components/layout/Navigation/Custom/CustomNavigate.tsx";
+import ProjectOverview from "./routes/project";
 
 /**
  * ProtectedRoutes component that redirects to /login if the user is not logged in
@@ -46,7 +45,7 @@ export const router = createBrowserRouter(
             <Route element={<ProtectedRoutes/>}>
                 <Route path="/account/*" element={<Account/>}/>
                 <Route path="/project">
-                    <Route index element={<Header leftSection={<IconForklift/>} label={"Dashboard"}/>}/>
+                    <Route index element={<ProjectOverview/>}/>
                     <Route path="new/*" element={<NewProject/>}/>
                     <Route path=":projectId/*" element={<Project/>}/>
                 </Route>
