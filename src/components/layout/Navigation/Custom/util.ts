@@ -41,7 +41,7 @@ export const useCustomNavigate = () => {
         }
 
         if (typeof to === "number" && to == -1) {
-            navigate(user ? "/project" : "/")
+            navigate(user ? "/project" : "/", {})
             return
         }
 

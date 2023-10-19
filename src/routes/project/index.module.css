@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-sm)
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: var(--mantine-spacing-xs);
+    flex-wrap: wrap;
+}
+
+.projectLink {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-xs);
+    border-radius: var(--mantine-radius-sm);
+    padding: var(--mantine-radius-sm);
+
+    &:hover{
+        box-shadow: var(--mantine-shadow-sm);
+    }
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 10%;
+    min-height: 20%;
+}
+
+.projectName {
+    font-size: var(--mantine-font-size-lg);
+    font-weight: 600;
+}
