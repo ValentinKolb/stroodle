@@ -6,7 +6,9 @@ import Header from "../../components/layout/Header";
 import classes from './index.module.css';
 import ProjectIcon from "../../components/ProjectIcon.tsx";
 import {CustomLink} from "../../components/layout/Navigation/Custom/CustomLink.tsx";
-import {Loader} from "@mantine/core";
+import {Loader, Text, ThemeIcon} from "@mantine/core";
+import {IconArrowDown} from "@tabler/icons-react";
+import {BrandIconChat, BrandIconTask} from "../../lib/icons.tsx";
 
 export default function ProjectOverview() {
 
@@ -25,33 +27,60 @@ export default function ProjectOverview() {
             href={`/project`}
         />
 
-        <div className={classes.content}>
+         {query.isPending && <Loader size={"sm"} ml={"md"} mt={"md"}/>}
 
-            {query.data?.map((project) => (
+                {query.data?.length === 0 &&
+                    <Text className={"center"} c={"dimmend"}>
+                        Es wurden noch keine Projekte erstellt. Erstelle ein neues Projekt.
+                    </Text>
+                }
 
-                <CustomLink
-                    to={`/project/${project.id}`}
-                    key={project.id}
-                    className={classes.projectLink}
-                >
+        <div className={`scrollbar`}>
 
-                    <ProjectIcon project={project}/>
+            <div className={`${classes.content}`}>
 
-                    <div className={classes.projectName}>
-                        {project.name}
+                {query.data?.map((project) => (
+
+                    <div
+                        key={project.id}
+                        className={classes.projectContainer}
+                    >
+
+                        <ProjectIcon project={project}/>
+
+                        <CustomLink
+                            to={`/project/${project.id}`}
+                            className={classes.projectName}
+                        >
+                            {project.name}
+                        </CustomLink>
+
+                        <Text lineClamp={3} className={classes.projectDescription}>
+                            {project.description}
+                        </Text>
+
+                        <div className={classes.btnGroup}>
+                            <ThemeIcon
+                                className={classes.projectButton}
+                                variant={"light"}
+                            >
+                                <IconArrowDown/>
+                            </ThemeIcon>
+
+                            <CustomLink className={classes.icon} to={`/project/${project.id}/messages`}>
+                                <BrandIconChat/>
+                            </CustomLink>
+
+                            <CustomLink className={classes.icon} to={`/project/${project.id}/tasks`}>
+                                <BrandIconTask/>
+                            </CustomLink>
+                        </div>
                     </div>
 
-                </CustomLink>
+                ))}
 
-            ))}
 
-            {query.isPending && <Loader size={"sm"} ml={"md"} mt={"md"}/>}
-
-            {query.data?.length === 0 &&
-                <div className={"center"}>
-                    Es wurden noch keine Projekte erstellt. Erstelle ein neues Projekt.
-                </div>
-            }
+            </div>
         </div>
     </div>
 }

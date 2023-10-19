@@ -3,14 +3,13 @@ import '@mantine/dates/styles.css';
 import '@mantine/tiptap/styles.css';
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {createTheme, DEFAULT_THEME, MantineProvider, mergeMantineTheme} from "@mantine/core";
+import {createTheme, DEFAULT_THEME, LoadingOverlay, MantineProvider, mergeMantineTheme} from "@mantine/core";
 import {registerSW} from "virtual:pwa-register";
 import {PocketBaseProvider, usePB} from "./lib/pocketbase.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./global.css"
 import {RecoilRoot} from "recoil";
-import {LoadingOverlay} from "@mantine/core";
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProvider} from "react-router-dom";
 import {CustomNavigate} from "./components/layout/Navigation/Custom/CustomNavigate.tsx";
 import Navigation from "./components/layout/Navigation";
 import Home from "./routes/index";
@@ -53,11 +52,13 @@ const theme = mergeMantineTheme(DEFAULT_THEME, themeOverride);
  */
 const ProtectedRoutes = () => {
     const {user} = usePB()
+
     if (user == null) {
         return <CustomNavigate to={"/login"}/>
     }
     if (!user.verified) {
-        return <CustomNavigate to={"/account/confirm/verification"}/>
+        // todo: redirect to /account/confirm/verification but keep the token
+        return <Outlet/>
     }
     return <Navigation/>
 }

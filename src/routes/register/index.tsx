@@ -36,6 +36,7 @@ import {ClientResponseError} from "pocketbase";
 import PasswordStrengthMeter, {getPasswordStrength} from "../../components/input/PasswordStrengthMeter.tsx";
 import {CustomNavigate} from "../../components/layout/Navigation/Custom/CustomNavigate.tsx";
 import {CustomLink} from "../../components/layout/Navigation/Custom/CustomLink.tsx";
+import {FieldDiv} from "../../components/FieldLink";
 
 /**
  * Register page
@@ -110,15 +111,15 @@ export default function Register() {
     }
 
     return <>
-
         <Box
             p={"lg"}
             style={() => ({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                maxHeight: "100%",
+                overflow: "auto",
             })}
-            className={"scrollbar"}
         >
             <Image maw={200} mx="auto" src="/woman-waving.svg" alt="Man waving" mb={"xl"}/>
 
@@ -148,8 +149,7 @@ export default function Register() {
                            py: "xs",
                        }}
                 >
-                    <Paper withBorder shadow="xs" p={"lg"} radius="md">
-
+                    <FieldDiv legend={""}>
                         <TextInput
                             label="Anzeigename"
                             placeholder="Wie sollen wir Dich nennen?"
@@ -206,7 +206,7 @@ export default function Register() {
                             maxRows={6}
                             {...formValues.getInputProps("aboutMe")}
                         />
-                    </Paper>
+                    </FieldDiv>
 
                     <Paper withBorder shadow="xs" p={"lg"} radius="md">
                         <PasswordInput

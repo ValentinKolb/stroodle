@@ -30,6 +30,8 @@ export default function Verification() {
         },
     })
 
+    console.log(token)
+
     // redirect to /login if user is not logged in
     if (user == null) {
         return <CustomNavigate to={"/login"}/>
