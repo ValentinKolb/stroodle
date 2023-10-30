@@ -28,6 +28,7 @@ export default function NotificationSubscription() {
     useSubscription<MessageModel>({
         idOrName: 'messages',
         callback: async (data) => {
+            console.log(data)
             if (!user?.notifications) return
             const message = data.record
             if (data.action === "create" && !(matches && message.project === projectId)) {
@@ -59,7 +60,9 @@ export default function NotificationSubscription() {
                     color: "messageColor",
                     autoClose: 1000,
                 })
-                user?.sound && setPlaySound(true)
+                if (user.sound) {
+                    setPlaySound(true)
+                }
             }
         }
     })

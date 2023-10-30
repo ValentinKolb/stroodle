@@ -33,6 +33,7 @@ export const CustomLink = forwardRef<HTMLAnchorElement, CustomLinkProps>(
                 state={state}
                 replace={closeSideBar ? false : (props.replace ?? true)}
                 ref={ref} // Passing the ref down to NavLink
+                aria-label={props["aria-label"] ?? `Link to ${props.to}`}
             />
         );
     }

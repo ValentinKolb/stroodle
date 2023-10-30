@@ -10,7 +10,7 @@ export default function NotFound({text}: { text?: string }) {
     return (
         <div className={"center"}>
             {!text && <Image
-                src={"/logo.svg"}
+                src={"/logo-square.svg"}
                 maw={100}
                 mah={100}
             />}

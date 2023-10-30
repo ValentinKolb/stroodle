@@ -21,7 +21,7 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                 className={`${classes.container}`}
                 data-author={message.author === user?.id}
                 data-reply={!!message.replyTo}
-
+                data-hightlight={message.id === scrollToId}
             >
 
                 {
@@ -47,7 +47,7 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                     className={classes.message}
                     {...props}
                     ref={ref}
-                    data-hightlight={message.id === scrollToId}
+
                 >
                     <div className={classes.author}>
                         @{message.expand?.author?.username}

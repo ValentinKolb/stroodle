@@ -63,10 +63,19 @@ const Toolbar = ({fullToolbar}: { fullToolbar: boolean, editor: Editor }) => (
  * Cleans the string from empty paragraphs.
  * @param s The string to clean.
  */
-export const cleanHtmlString = (s: string) => s
-    .replace(/^(<p>\s*<\/p>)+$/g, '')
-    .replace(/^(<p>\s*<\/p>)+/g, '')
-    .replace(/(<p>\s*<\/p>)+$/g, '')
+export const cleanHtmlString = (s: string) =>
+    htmlStringIsEmpty(s) ? '' : (
+        s
+            .replace(/^(<p>\s*<\/p>)+$/g, '')
+            .replace(/^(<p>\s*<\/p>)+/g, '')
+            .replace(/(<p>\s*<\/p>)+$/g, '')
+    )
+
+export const htmlStringIsEmpty = (s: string) => {
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = s;
+    return tempElement.textContent === '';
+}
 
 /**
  * A wrapper around the Mantine Input component that provides a WYSIWYG editor.

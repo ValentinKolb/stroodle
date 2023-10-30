@@ -1,6 +1,6 @@
 import {MessageModel, ProjectModel} from "../../../../lib/models.ts";
 import {useMutation} from "@tanstack/react-query";
-import TextEditor, {cleanHtmlString} from "../../../../components/input/Editor";
+import TextEditor, {cleanHtmlString, htmlStringIsEmpty} from "../../../../components/input/Editor";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import {useHotkeys} from "@mantine/hooks";
 import {ActionIcon, ThemeIcon, Tooltip} from "@mantine/core";
@@ -31,10 +31,12 @@ export default function NewMessage({project}: { project: ProjectModel }) {
 
     useHotkeys([
         ['mod+Enter', () => sendMessageMutation.mutate()],
-    ], undefined, true);
+    ], undefined, true)
 
     const sendMessageMutation = useMutation({
         mutationFn: async () => {
+            if (htmlStringIsEmpty(text)) throw new Error("Message is empty")
+
             return await pb.collection('messages').create({
                 text: cleanHtmlString(text),
                 replyTo: replyTo?.id || null,
@@ -64,7 +66,7 @@ export default function NewMessage({project}: { project: ProjectModel }) {
 
                     <Html
                         className={`one-line ${messageClasses.message} ${classes.replyToText}`}
-                        onClick={() => scrollToMessage(replyTo!.id)}
+                        onClick={() => scrollToMessage(replyTo!)}
                         data-author={replyTo.expand?.author?.id === user?.id}
                     >
                         {replyTo.text}
@@ -95,10 +97,10 @@ export default function NewMessage({project}: { project: ProjectModel }) {
                     hideToolbar
                 />
 
-                <Tooltip label={"MOD + Enter"}>
+                <Tooltip label={"⌘ ⏎"}>
                     <ActionIcon
                         loading={sendMessageMutation.isPending}
-                        disabled={cleanHtmlString(text).length === 0}
+                        disabled={htmlStringIsEmpty(text)}
                         aria-label={"Send Message"}
                         variant={"transparent"}
                         type={"submit"}

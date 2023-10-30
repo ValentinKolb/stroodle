@@ -11,7 +11,7 @@ export default defineConfig({
                 devOptions: {
                     enabled: true,
                 },
-             injectRegister: 'auto',
+                injectRegister: 'auto',
                 // add this to cache all the imports
                 workbox: {
                     globPatterns: ["**/*"],
@@ -30,32 +30,29 @@ export default defineConfig({
                     "short_name": "Stroodle.me",
                     "description": "project management app",
                     "name": "Stroodle.me",
-                    "icons": [
+                    icons: [
                         {
-                            "src": "/icons/manifest-icon-192.maskable.png",
-                            "sizes": "192x192",
-                            "type": "image/png",
-                            "purpose": "any"
+                            src: 'pwa-64x64.png',
+                            sizes: '64x64',
+                            type: 'image/png'
                         },
                         {
-                            "src": "/icons/manifest-icon-192.maskable.png",
-                            "sizes": "192x192",
-                            "type": "image/png",
-                            "purpose": "maskable"
+                            src: 'pwa-192x192.png',
+                            sizes: '192x192',
+                            type: 'image/png'
                         },
                         {
-                            "src": "/icons/manifest-icon-512.maskable.png",
-                            "sizes": "512x512",
-                            "type": "image/png",
-                            "purpose": "any"
+                            src: 'pwa-512x512.png',
+                            sizes: '512x512',
+                            type: 'image/png',
+                            purpose: 'any'
                         },
                         {
-                            "src": "/icons/manifest-icon-512.maskable.png",
-                            "sizes": "512x512",
-                            "type": "image/png",
-                            "purpose": "maskable"
+                            src: 'maskable-icon-512x512.png',
+                            sizes: '512x512',
+                            type: 'image/png',
+                            purpose: 'maskable'
                         }
-
                     ],
                 },
             }
