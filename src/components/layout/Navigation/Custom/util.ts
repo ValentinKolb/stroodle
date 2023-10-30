@@ -15,6 +15,7 @@ export const modifyQueryParam = (path: string, paramName: string, newValue: stri
     // Return modified path
     return `${basePath}?${searchParams.toString()}`;
 }
+
 export const useCustomNavigate = () => {
     const {user} = usePB()
     const {state} = useLocation()

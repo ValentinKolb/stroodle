@@ -9,7 +9,7 @@ import {PocketBaseProvider, usePB} from "./lib/pocketbase.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import "./global.css"
 import {RecoilRoot} from "recoil";
-import {createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, useParams} from "react-router-dom";
 import {CustomNavigate} from "./components/layout/Navigation/Custom/CustomNavigate.tsx";
 import Navigation from "./components/layout/Navigation";
 import Home from "./routes/index";
@@ -52,15 +52,18 @@ const theme = mergeMantineTheme(DEFAULT_THEME, themeOverride);
  */
 const ProtectedRoutes = () => {
     const {user} = usePB()
+    const {token} = useParams()
 
     if (user == null) {
         return <CustomNavigate to={"/login"}/>
     }
     if (!user.verified) {
         // todo: redirect to /account/confirm/verification but keep the token
-        return <Outlet/>
+        return <CustomNavigate to={`/account/confirm/verification${token ? "/" + token : ""}`}/>
     }
-    return <Navigation/>
+    return <>
+        <Navigation/>
+    </>
 }
 
 // Create the router

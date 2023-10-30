@@ -25,6 +25,8 @@
         align-self: flex-end;
         margin-right: var(--margin);
     }
+
+
 }
 
 .reply {
@@ -43,6 +45,10 @@
 
     background-color: var(--message-bg-color);
     color: var(--message-text-color);
+
+    &[data-hightlight='true'] {
+        box-shadow: 0 0 5px 2px var(--message-bg-color-hover);
+    }
 
     &:hover {
         background-color: var(--message-bg-color-hover);

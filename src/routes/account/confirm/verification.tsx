@@ -1,7 +1,7 @@
 import {usePB} from "../../../lib/pocketbase.tsx";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {Alert, Box, Button, Group, Image, LoadingOverlay, Text} from "@mantine/core";
-import {IconExclamationMark, IconMail, IconMailCheck, IconReload} from "@tabler/icons-react";
+import {IconExclamationMark, IconMail, IconMailCheck, IconX} from "@tabler/icons-react";
 import {useParams} from "react-router-dom";
 import {CustomLink} from "../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import {CustomNavigate} from "../../../components/layout/Navigation/Custom/CustomNavigate.tsx";
@@ -9,7 +9,7 @@ import {CustomNavigate} from "../../../components/layout/Navigation/Custom/Custo
 export default function Verification() {
 
     const {token} = useParams()
-    const {pb, refresh, user} = usePB()
+    const {pb, refresh, user, logout} = usePB()
 
     // query to verify the token automatically if it is present
     const verifyQuery = useQuery({
@@ -29,8 +29,6 @@ export default function Verification() {
             await pb.collection('users').requestVerification(user!.email)
         },
     })
-
-    console.log(token)
 
     // redirect to /login if user is not logged in
     if (user == null) {
@@ -77,16 +75,27 @@ export default function Verification() {
                     >
                         Bitte checke Deine Emails und klicke auf den Link, um deine Email zu verifizieren.
                     </Text>
-                    <Button
-                        onClick={() => resendVerification.mutate()}
-                        loading={resendVerification.isPending}
-                        disabled={resendVerification.isPending}
-                        variant={"subtle"}
-                        c={resendVerification.isSuccess ? "green" : "blue"}
-                        leftSection={resendVerification.isSuccess ? <IconMailCheck/> : <IconMail/>}
-                    >
-                        Link erneut senden
-                    </Button>
+                    <Group>
+                        <Button
+                            onClick={() => logout()}
+                            variant={"subtle"}
+                            c={"gray"}
+                            leftSection={<IconX/>}
+                        >
+                            Zurück zum Login
+                        </Button>
+
+                        <Button
+                            onClick={() => resendVerification.mutate()}
+                            loading={resendVerification.isPending}
+                            disabled={resendVerification.isPending}
+                            variant={"subtle"}
+                            c={resendVerification.isSuccess ? "green" : "blue"}
+                            leftSection={resendVerification.isSuccess ? <IconMailCheck/> : <IconMail/>}
+                        >
+                            Link erneut senden
+                        </Button>
+                    </Group>
                 </>
             }
             { /* case token could not be verified */
@@ -98,14 +107,12 @@ export default function Verification() {
 
                     <Group>
                         <Button
-                            onClick={() => verifyQuery.refetch()}
-                            loading={verifyQuery.isPending}
-                            disabled={verifyQuery.isPending}
+                            onClick={() => logout()}
                             variant={"subtle"}
                             c={"gray"}
-                            leftSection={<IconReload/>}
+                            leftSection={<IconX/>}
                         >
-                            Nochmal versuchen
+                            Zurück zum Login
                         </Button>
 
                         <Button

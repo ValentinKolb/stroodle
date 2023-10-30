@@ -17,7 +17,6 @@
 }
 
 html, body {
-    overflow: hidden; /* Prevents scrolling on the window */
     @media (display-mode: fullscreen) {
         position: fixed;
         left: 0;

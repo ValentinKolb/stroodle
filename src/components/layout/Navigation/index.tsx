@@ -5,6 +5,8 @@ import ActionSearch from "./ActionSearch";
 import {IconMenu2, IconMenuDeep} from "@tabler/icons-react";
 import {Outlet} from "react-router-dom";
 import {useSideMenuBar} from "../../../lib/uiUtil.tsx";
+import NotificationSubscription from "./NotificationSubscription";
+import {CustomLink} from "./Custom/CustomLink.tsx";
 
 
 export default function Navigation() {
@@ -12,21 +14,27 @@ export default function Navigation() {
     const {hideSideMenuBar, toggleSideMenuBar} = useSideMenuBar()
 
     return <div className={classes.container}>
+        <NotificationSubscription/>
+
         {/* Desktop Menu */}
         <header className={classes.header}>
-            <UnstyledButton onClick={toggleSideMenuBar}>
-                <Group gap={"xs"}>
-                    <ThemeIcon
-                        aria-label={"Toggle sidebar"}
-                        variant="transparent"
-                    >
-                        {hideSideMenuBar ? <IconMenu2/> : <IconMenuDeep/>}
-                    </ThemeIcon>
+            <Group gap={"xs"}>
+                <UnstyledButton onClick={toggleSideMenuBar}>
+                    <Group>
+                        <ThemeIcon
+                            aria-label={"Toggle sidebar"}
+                            variant="transparent"
+                        >
+                            {hideSideMenuBar ? <IconMenu2/> : <IconMenuDeep/>}
+                        </ThemeIcon>
+                    </Group>
+                </UnstyledButton>
+                <CustomLink to={"/project"}>
                     <Title c={"blue"} size={'xl'}>
                         Stroodle.me
                     </Title>
-                </Group>
-            </UnstyledButton>
+                </CustomLink>
+            </Group>
             <ActionSearch/>
         </header>
 

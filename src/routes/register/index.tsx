@@ -96,6 +96,8 @@ export default function Register() {
                 password: formValues.values.password,
                 passwordConfirm: formValues.values.passwordConfirm,
                 terms: formValues.values.terms,
+                notifications: true,
+                sound: true,
             })
             await pb.collection("users").requestVerification(formValues.values.email)
             await login(formValues.values.email, formValues.values.password)
@@ -118,7 +120,7 @@ export default function Register() {
                 flexDirection: "column",
                 alignItems: "center",
                 maxHeight: "100%",
-                overflow: "auto",
+                // overflow: "auto",
             })}
         >
             <Image maw={200} mx="auto" src="/woman-waving.svg" alt="Man waving" mb={"xl"}/>

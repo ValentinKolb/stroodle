@@ -24,7 +24,6 @@ export default function MenuBar({editor}: { editor: Editor }) {
     return (
         <>
             <div className={classes.iconGroup}>
-
                 <ActionIcon
                     aria-label={"bold"}
                     onClick={() => editor.chain().focus().toggleBold().run()}

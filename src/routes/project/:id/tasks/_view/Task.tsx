@@ -9,16 +9,20 @@ import {IconSquare, IconSquareCheck, IconSquareFilled, IconTrash} from "@tabler/
 import {CustomLink} from "../../../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import Html from "../../../../../components/Html";
 import {formatTaskDate} from "../../../../../lib/dateUtil.ts";
+import {useSwitchSound, useTrashSound} from "../../../../../lib/sound.ts";
 
 export default function Task({task}: { task: TaskModel }) {
 
     const {pb} = usePB()
 
     const [taskIsUpdating, setTaskIsUpdating] = useState(false)
+    const switchSound = useSwitchSound()
+    const trashSound = useTrashSound()
 
     const toggleTaskMutation = useMutation({
         mutationFn: async () => {
             setTaskIsUpdating(true)
+            switchSound(!task.done)
             await pb.collection('tasks').update(task.id, {done: !task.done})
         },
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["project", task.project, "tasks"]}),
@@ -27,6 +31,7 @@ export default function Task({task}: { task: TaskModel }) {
 
     const deleteTaskMutation = useMutation({
         mutationFn: async () => {
+            trashSound()
             await pb.collection('tasks').delete(task.id)
         },
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["project", task.project, "tasks"]})

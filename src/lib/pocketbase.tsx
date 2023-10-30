@@ -35,7 +35,7 @@ const PocketData = (baseUrl: string) => {
         refreshUser()
     }, [refreshUser, idle])
 
-    const register = useCallback(async (data: Pick<UserModel, "username" | "email" | "aboutMe" | "terms" | "jobTitle"> & {
+    const register = useCallback(async (data: Pick<UserModel, "username" | "email" | "aboutMe" | "terms" | "jobTitle" | "notifications" | "sound"> & {
         password: string,
         passwordConfirm: string
     }) => {

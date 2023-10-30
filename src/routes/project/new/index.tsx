@@ -8,7 +8,6 @@ import {usePB} from "../../../lib/pocketbase.tsx";
 import {ClientResponseError} from "pocketbase";
 import {queryClient} from "../../../main.tsx";
 import z from "zod";
-import {useMobile} from "../../../lib/uiUtil.tsx";
 import {useCustomNavigate} from "../../../components/layout/Navigation/Custom/util.ts";
 
 
@@ -16,8 +15,6 @@ export default function NewProject() {
 
     const {pb, user} = usePB()
     const navigate = useCustomNavigate()
-
-    const isMobile = useMobile()
 
     const formValues = useForm({
         initialValues: {
@@ -46,7 +43,7 @@ export default function NewProject() {
     })
 
 
-    return <Modal opened onClose={() => navigate(-1)} withCloseButton={false} centered={isMobile} size={"xs"}>
+    return <Modal opened onClose={() => navigate(-1)} withCloseButton={false}  size={"xs"}>
         <form
             className={classes.container}
             onSubmit={formValues.onSubmit(() => editProjectMutation.mutate())}

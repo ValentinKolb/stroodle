@@ -4,25 +4,30 @@ import {usePB} from "../../../../lib/pocketbase.tsx";
 import classes from "./message.module.css";
 import Html from "../../../../components/Html";
 import {formateChatDate} from "../../../../lib/dateUtil.ts";
-import {scrollToMessage} from "./util.ts";
 import {ThemeIcon} from "@mantine/core";
 import {IconArrowForward} from "@tabler/icons-react";
+import {CustomLink} from "../../../../components/layout/Navigation/Custom/CustomLink.tsx";
+import {scrollToMessage} from "./util.ts";
+import {useSearchParams} from "react-router-dom";
 
 export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HTMLProps<HTMLDivElement>>(
     ({message, ...props}, ref) => {
-        const {user} = usePB();
+        const {user} = usePB()
+        const [searchParams] = useSearchParams()
+        const scrollToId = searchParams.get("scrollToId")
 
         return (
             <div
                 className={`${classes.container}`}
                 data-author={message.author === user?.id}
                 data-reply={!!message.replyTo}
+
             >
 
                 {
                     message.replyTo && (
-                        <div
-                            onClick={() => scrollToMessage(message.replyTo!)}
+                        <CustomLink
+                            to={scrollToMessage(message.expand!.replyTo!)}
                             className={`${classes.message} ${classes.reply}`}
                             data-author={message.expand?.replyTo?.author === user?.id}
                         >
@@ -34,15 +39,15 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                             <Html className={`one-line`}>
                                 {message.expand!.replyTo!.text}
                             </Html>
-                        </div>
+                        </CustomLink>
 
                     )
                 }
-
                 <div
                     className={classes.message}
                     {...props}
                     ref={ref}
+                    data-hightlight={message.id === scrollToId}
                 >
                     <div className={classes.author}>
                         @{message.expand?.author?.username}

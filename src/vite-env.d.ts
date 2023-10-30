@@ -14,3 +14,4 @@ declare module 'virtual:pwa-register/react' {
 
 declare module '*.module.css';
 declare module '*.css';
+declare module '*.mp3';

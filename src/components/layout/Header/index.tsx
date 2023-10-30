@@ -4,7 +4,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {IconChevronLeft} from "@tabler/icons-react";
 import {ReactNode} from "react";
 import {CustomLink} from "../Navigation/Custom/CustomLink.tsx";
-import {useCustomNavigate} from "../Navigation/Custom/util.ts";
+import {useSideMenuBar} from "../../../lib/uiUtil.tsx";
 
 export default function Header({label, href, leftSection, rightSection}: {
     label: ReactNode
@@ -14,16 +14,16 @@ export default function Header({label, href, leftSection, rightSection}: {
 }) {
 
     const isMobile = useMediaQuery(`(max-width: 576px)`)
-    const navigate = useCustomNavigate()
+
+    const {openSideMenuBar} = useSideMenuBar()
 
     return <div className={classes.container}>
 
         <div className={classes.header}>
-
             {isMobile &&
                 <ActionIcon
                     aria-label={"open side menu"}
-                    onClick={() => navigate(-1, {replace: false, discardFromState: true})}
+                    onClick={openSideMenuBar}
                     variant="transparent"
                     size={"lg"}
 

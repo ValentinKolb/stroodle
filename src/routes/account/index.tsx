@@ -1,6 +1,15 @@
-import {ActionIcon, Avatar, Modal, Text, ThemeIcon, Tooltip} from '@mantine/core';
+import {ActionIcon, Avatar, Divider, Modal, Text, ThemeIcon, Tooltip} from '@mantine/core';
 import {usePB} from "../../lib/pocketbase.tsx";
-import {IconLogout, IconPencil, IconReload, IconTrash} from "@tabler/icons-react";
+import {
+    IconLogout,
+    IconMessageCircle,
+    IconMessageCircleOff,
+    IconPencil,
+    IconReload,
+    IconTrash,
+    IconVolume,
+    IconVolumeOff
+} from "@tabler/icons-react";
 import ContactQRCard from "../../components/ContactQRCard.tsx";
 import {Outlet, Route, Routes} from "react-router-dom";
 import Header from "../../components/layout/Header";
@@ -15,16 +24,45 @@ import {CustomLink} from "../../components/layout/Navigation/Custom/CustomLink.t
 import {CustomNavigate} from "../../components/layout/Navigation/Custom/CustomNavigate.tsx";
 import {useCustomNavigate} from "../../components/layout/Navigation/Custom/util.ts";
 import Html from '../../components/Html/index.tsx';
+import {useMutation} from "@tanstack/react-query";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import useSound from "use-sound";
+import onSound from "/sounds/rising-pops.mp3"
+import offSound from "/sounds/disable-sound.mp3"
+import {useSwitchSound} from "../../lib/sound.ts";
 
 function AccountView() {
 
     const {pb, user, logout, refresh} = usePB()
+
+    const [playOn] = useSound(onSound, {volume: 0.25, interrupt: true})
+    const [playOff] = useSound(offSound, {volume: 0.25, interrupt: true})
+    const switchSound = useSwitchSound()
+
+    const toggleNotificationsMutation = useMutation({
+        mutationFn: async () => {
+            switchSound(!!user!.notifications)
+            return pb.collection("users").update(user!.id, {notifications: !user!.notifications})
+        },
+        onSuccess: refresh
+    })
+
+    const toggleSoundMutation = useMutation({
+        mutationFn: async () => {
+            user?.sound ? playOff() : playOn()
+            return pb.collection("users").update(user!.id, {sound: !user!.sound})
+        },
+        onSuccess: refresh
+    })
 
     if (user == null) {
         return <CustomNavigate to={"/login"}/>
     }
 
     return <div className={classes.container}>
+
+
         <Header
             label={
                 <span className={classes.title}>
@@ -71,6 +109,32 @@ function AccountView() {
         </FieldLink>
 
         <div className={classes.group}>
+            <Tooltip label={user.notifications ? "Benachrichtigungen aus" : "Benachrichtigungen ein"}>
+                <ActionIcon
+                    variant="subtle"
+                    onClick={() => toggleNotificationsMutation.mutate()}
+                    aria-label={"Notifications"}
+                    color={"blue"}
+                    loading={toggleNotificationsMutation.isPending}
+                >
+                    {user.notifications ? <IconMessageCircle/> : <IconMessageCircleOff/>}
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label={user.sound ? "Töne aus" : "Töne ein"}>
+                <ActionIcon
+                    variant="subtle"
+                    onClick={() => toggleSoundMutation.mutate()}
+                    aria-label={"Sounds"}
+                    color={"blue"}
+                    loading={toggleSoundMutation.isPending}
+                >
+                    {user.sound ? <IconVolume/> : <IconVolumeOff/>}
+                </ActionIcon>
+            </Tooltip>
+
+            <Divider orientation={"vertical"}/>
+
             <Tooltip label={"Ausloggen"}>
                 <ActionIcon
                     variant="subtle"
@@ -130,31 +194,31 @@ export default function Account() {
             }
 
             <Route path={"qr"} element={(
-                <Modal centered={isMobile} opened onClose={close} withCloseButton={false}>
+                <Modal opened onClose={close} withCloseButton={false}>
                     <ContactQRCard close={close}/>
                 </Modal>
             )}/>
 
             <Route path={"e/pwd"} element={(
-                <Modal centered={isMobile} opened onClose={close} withCloseButton={false}>
+                <Modal opened onClose={close} withCloseButton={false}>
                     <EditUserPassword/>
                 </Modal>
             )}/>
 
             <Route path={"e/desc"} element={(
-                <Modal centered={isMobile} opened onClose={close} withCloseButton={false}>
+                <Modal opened onClose={close} withCloseButton={false}>
                     <EditUserDescription/>
                 </Modal>
             )}/>
 
             <Route path={"e/avatar"} element={(
-                <Modal centered={isMobile} opened onClose={close} withCloseButton={false}>
+                <Modal opened onClose={close} withCloseButton={false}>
                     <EditUserAvatar/>
                 </Modal>
             )}/>
 
             <Route path={"e/delete"} element={(
-                <Modal centered={isMobile} opened onClose={close} withCloseButton={false} size={"xs"}>
+                <Modal opened onClose={close} withCloseButton={false} size={"xs"}>
                     <DeleteUser/>
                 </Modal>
             )}/>

@@ -163,20 +163,20 @@ export default function Project() {
                     <Route path="messages" element={<Messages project={projectQuery.data}/>}/>
 
                     <Route path="e/desc" element={
-                        <Modal centered={isMobile} opened onClose={close} withCloseButton={false}>
+                        <Modal  opened onClose={close} withCloseButton={false}>
                             <EditProjectDescription project={projectQuery.data}/>
                         </Modal>
                     }/>
 
                     <Route path="e/icon" element={
-                        <Modal size={"sm"} centered={isMobile} opened onClose={close} withCloseButton={false}
+                        <Modal size={"sm"}  opened onClose={close} withCloseButton={false}
                                lockScroll={false}>
                             <EditProjectEmoji project={projectQuery.data}/>
                         </Modal>
                     }/>
 
                     <Route path="e/members" element={
-                        <Modal size={"sm"} centered={isMobile} opened onClose={close} withCloseButton={false}>
+                        <Modal size={"sm"}  opened onClose={close} withCloseButton={false}>
                             <EditProjectMembers project={projectQuery.data}/>
                         </Modal>
                     }/>

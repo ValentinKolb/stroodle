@@ -9,6 +9,7 @@ import {CustomLink} from "../../components/layout/Navigation/Custom/CustomLink.t
 import {Loader, Text, ThemeIcon} from "@mantine/core";
 import {IconArrowDown} from "@tabler/icons-react";
 import {BrandIconChat, BrandIconTask} from "../../lib/icons.tsx";
+import Html from "../../components/Html/index.tsx";
 
 export default function ProjectOverview() {
 
@@ -27,18 +28,16 @@ export default function ProjectOverview() {
             href={`/project`}
         />
 
-         {query.isPending && <Loader size={"sm"} ml={"md"} mt={"md"}/>}
+        {query.isPending && <Loader size={"sm"} ml={"md"} mt={"md"}/>}
 
-                {query.data?.length === 0 &&
-                    <Text className={"center"} c={"dimmend"}>
-                        Es wurden noch keine Projekte erstellt. Erstelle ein neues Projekt.
-                    </Text>
-                }
+        {query.data?.length === 0 &&
+            <Text className={"center"} c={"dimmend"}>
+                Es wurden noch keine Projekte erstellt. Erstelle ein neues Projekt.
+            </Text>
+        }
 
         <div className={`scrollbar`}>
-
             <div className={`${classes.content}`}>
-
                 {query.data?.map((project) => (
 
                     <div
@@ -55,9 +54,9 @@ export default function ProjectOverview() {
                             {project.name}
                         </CustomLink>
 
-                        <Text lineClamp={3} className={classes.projectDescription}>
-                            {project.description}
-                        </Text>
+                        <Html className={"one-line"}>
+                            {project.description || ""}
+                        </Html>
 
                         <div className={classes.btnGroup}>
                             <ThemeIcon
@@ -76,10 +75,7 @@ export default function ProjectOverview() {
                             </CustomLink>
                         </div>
                     </div>
-
                 ))}
-
-
             </div>
         </div>
     </div>

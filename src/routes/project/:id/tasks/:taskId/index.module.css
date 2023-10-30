@@ -6,6 +6,7 @@
     flex-grow: 1;
     border-radius: var(--mantine-radius-sm);
     transition: all 0.1s ease-out;
+
     &:hover {
         box-shadow: var(--mantine-shadow-sm);
     }
@@ -15,12 +16,18 @@
     margin-top: auto;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: var(--mantine-spacing-xs);
+    overflow-x: scroll;
+    overflow-y: hidden;
+    min-width: 100%;
+    flex: none;
 }
 
 .iconGroup {
     display: flex;
+    flex-wrap: nowrap;
+    min-width: min-content;
 
     & > .icon {
         border-radius: 0;
@@ -31,29 +38,36 @@
     }
 
     & > .icon:first-child {
-        border-top-left-radius: var(--mantine-radius-sm);
-        border-bottom-left-radius: var(--mantine-radius-sm);
+        border-top-left-radius: var(--mantine-radius-md);
+        border-bottom-left-radius: var(--mantine-radius-md);
     }
 
     & > .icon:last-child {
-        border-top-right-radius: var(--mantine-radius-sm);
-        border-bottom-right-radius: var(--mantine-radius-sm);
+        border-top-right-radius: var(--mantine-radius-md);
+        border-bottom-right-radius: var(--mantine-radius-md);
     }
 }
 
 .icon {
 
-    border: 1px solid var(--mantine-color-cyan-5);
+    border: 1px solid var(--mantine-color-body);
+    padding: 7px;
+    --ai-size: 35px;
 
-    color: var(--mantine-color-cyan-5);
-    background-color: unset;
+    color: var(--mantine-color-gray-5);
+    background-color: var(--mantine-color-gray-1);
 
     &[data-active="true"] {
-        color: var(--mantine-color-white);
-        background-color: var(--mantine-color-cyan-5);
+        color: var(--mantine-color-gray-8);
+        background-color: var(--mantine-color-gray-2);
+
+        & > * {
+            stroke-width: 2;
+        }
     }
 
+
     @media (max-width: $mantine-breakpoint-xs) {
-        --ai-size: 20px;
+
     }
 }

@@ -8,6 +8,8 @@ export type UserModel = {
     jobTitle: string | null; // max 50 chars
     terms: boolean;
     verified: boolean;
+    notifications?: boolean;
+    sound?: boolean;
 } & RecordModel
 
 export type UserViewModel = Pick<UserModel, "username" | "avatar"> & RecordModel
@@ -36,6 +38,8 @@ export type MessageModel = {
     project: string;
     readBy: string[];
     replyTo: string | null;
+    systemMessage: boolean | null;
+    link: string | null
     expand?: {
         author?: UserModel;
         project?: ProjectModel;

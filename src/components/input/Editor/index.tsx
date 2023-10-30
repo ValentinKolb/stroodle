@@ -70,12 +70,13 @@ export const cleanHtmlString = (s: string) => s
 
 /**
  * A wrapper around the Mantine Input component that provides a WYSIWYG editor.
- * @param initialValue The initial value of the editor.
+ * @param value The value of the editor.
  * @param onChange The callback to call when the editor's value changes.
  * @param placeholder The placeholder text to show when the editor is empty.
  * @param fullToolbar Whether to show the full toolbar or not.
  * @param maxHeight The maximum height of the editor.
  * @param hideToolbar Whether to hide the toolbar or not.
+ * @param noBorder shows no border if true
  * @param props The props to pass to the Mantine Input Wrapper component.
  */
 export default function TextEditor({
@@ -92,7 +93,7 @@ export default function TextEditor({
     onChange: (value: string) => void;
     placeholder?: string;
     fullToolbar?: boolean;
-    maxHeight?: number;
+    maxHeight?: number | string;
     hideToolbar?: boolean;
     noBorder?: boolean;
 } & Omit<InputWrapperProps, "onChange">) {
@@ -133,7 +134,7 @@ export default function TextEditor({
                     toolbar: classes.toolbar,
                 }}
             >
-                <RichTextEditorContent mah={maxHeight ?? 100}/>
+                <RichTextEditorContent mah={maxHeight ?? "100px"}/>
                 {hideToolbar ? <Bubble editor={editor}/> : <Toolbar editor={editor} fullToolbar={!!fullToolbar}/>}
             </Box>
         </Input.Wrapper>

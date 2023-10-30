@@ -1,4 +1,4 @@
-import {Text, TextInput, ThemeIcon} from "@mantine/core";
+import {TextInput, ThemeIcon} from "@mantine/core";
 import {ProjectModel, UserModel} from "../../../../lib/models.ts";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import UserAvatar from "../../../../components/UserAvatar.tsx";
@@ -7,6 +7,7 @@ import classes from "./index.module.css";
 import {CustomLink} from "../../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import {IconUserEdit} from "@tabler/icons-react";
 import {useState} from "react";
+import Html from "../../../../components/Html/index.tsx";
 
 export default function ProjectView({project}: { project: ProjectModel }) {
 
@@ -21,9 +22,9 @@ export default function ProjectView({project}: { project: ProjectModel }) {
     return <>
 
         <FieldLink legend={"Beschreibung"} to={"e/desc"}>
-            <Text>
-                {project.description ? project.description : "Klicken um eine Beschreibung hinzuzufügen ..."}
-            </Text>
+            <Html>
+                {project.description ? project.description : "<p>Klicken, um eine Beschreibung hinzuzufügen ...</p"}
+            </Html>
         </FieldLink>
 
         <FieldDiv legend={"Teilnehmende"} scrollable>

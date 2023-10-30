@@ -7,7 +7,9 @@ export const useMobile = () => {
 export const useSideMenuBar = () => {
 
     const searchParamsKey = "hideSideMenuBar"
-    const [searchParams, setSearchParams] = useSearchParams({key: searchParamsKey})
+    const [searchParams, setSearchParams] = useSearchParams({
+        [searchParamsKey]: "true"
+    })
     const isMobile = useMobile()
 
     const hideSideMenuBar = searchParams.get(searchParamsKey) === "true"
