@@ -8,13 +8,46 @@ import {DateInput} from "@mantine/dates";
 import classes from "./index.module.css";
 import {usePB} from "../../../../../lib/pocketbase.tsx";
 import {queryClient} from "../../../../../main.tsx";
-import TextEditor from "../../../../../components/input/Editor";
+import TextEditor, {textContent} from "../../../../../components/input/Editor";
 import {ProjectModel, TaskModel} from "../../../../../lib/models.ts";
 import Task from "./Task.tsx";
 
-const CreateTaskForm = ({projectId, close}: { projectId: string, close: () => void }) => {
+export const useCreateTaskMutation = ({projectId, onSuccess}: {
+    projectId: string,
+    onSuccess?: () => Promise<void>
+}) => {
 
-    const {pb} = usePB()
+    const {pb, user} = usePB()
+
+    return useMutation({
+        mutationFn: async ({description, deadline}: {
+            description: string,
+            deadline: Date | null,
+        }) => {
+            const task = await pb.collection('tasks').create<TaskModel>({
+                description: description,
+                deadline: deadline,
+                done: false,
+                project: projectId,
+            })
+
+            await pb.collection('messages').create({
+                text: `Neue Aufgabe erstellt: ${(textContent(description) || "").slice(1, 10)}...`,
+                project: projectId,
+                author: user?.id ?? "",
+                systemMessage: true,
+                link: `/project/${projectId}/tasks/${task.id}`,
+            })
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ["project", projectId, "tasks"]})
+            onSuccess && await onSuccess()
+        }
+    })
+}
+
+
+const CreateTaskForm = ({projectId, close}: { projectId: string, close: () => void }) => {
 
     const formValues = useForm({
         initialValues: {
@@ -23,24 +56,19 @@ const CreateTaskForm = ({projectId, close}: { projectId: string, close: () => vo
         }
     })
 
-    const createTaskMutation = useMutation({
-        mutationFn: async () => {
-            await pb.collection('tasks').create({
-                description: formValues.values.description,
-                deadline: formValues.values.deadline,
-                done: false,
-                project: projectId,
-            })
-        },
-        onSuccess: () => {
+    const createTaskMutation = useCreateTaskMutation({
+        projectId,
+        onSuccess: async () => {
             formValues.reset()
-            queryClient.invalidateQueries({queryKey: ["project", projectId, "tasks"]})
             close()
         }
     })
 
     return <>
-        <form onSubmit={formValues.onSubmit(() => createTaskMutation.mutate())}>
+        <form onSubmit={formValues.onSubmit(() => createTaskMutation.mutate({
+            description: formValues.values.description,
+            deadline: formValues.values.deadline,
+        }))}>
             <Stack gap={"sm"}>
                 <TextEditor
                     maxHeight={300}

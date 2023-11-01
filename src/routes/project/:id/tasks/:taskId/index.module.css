@@ -49,7 +49,6 @@
 }
 
 .icon {
-
     border: 1px solid var(--mantine-color-body);
     padding: 7px;
     --ai-size: 35px;
@@ -65,7 +64,6 @@
             stroke-width: 2;
         }
     }
-
 
     @media (max-width: $mantine-breakpoint-xs) {
 

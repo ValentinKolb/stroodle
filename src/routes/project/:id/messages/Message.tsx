@@ -5,16 +5,26 @@ import classes from "./message.module.css";
 import Html from "../../../../components/Html";
 import {formateChatDate} from "../../../../lib/dateUtil.ts";
 import {ThemeIcon} from "@mantine/core";
-import {IconArrowForward} from "@tabler/icons-react";
+import {IconArrowForward, IconPaperclip} from "@tabler/icons-react";
 import {CustomLink} from "../../../../components/layout/Navigation/Custom/CustomLink.tsx";
 import {scrollToMessage} from "./util.ts";
 import {useSearchParams} from "react-router-dom";
 
 export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HTMLProps<HTMLDivElement>>(
     ({message, ...props}, ref) => {
-        const {user} = usePB()
+        const {user, pb} = usePB()
         const [searchParams] = useSearchParams()
         const scrollToId = searchParams.get("scrollToId")
+
+        if (message.systemMessage) {
+            return <div className={classes.systemMessageContainer}>
+                <CustomLink to={message.link || ""} className={classes.systemMessage}>
+                    <Html className={`one-line`}>
+                        {message.text}
+                    </Html>
+                </CustomLink>
+            </div>
+        }
 
         return (
             <div
@@ -23,6 +33,27 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                 data-reply={!!message.replyTo}
                 data-hightlight={message.id === scrollToId}
             >
+
+                {
+                    message.file && (
+
+                        <a
+                            href={pb.files.getUrl(message, message.file)}
+                            download
+                            target={"_blank"}
+                            className={`${classes.message} ${classes.reply}`}
+                        >
+
+                            <ThemeIcon variant={"transparent"} c={"inherit"} size={"xs"}>
+                                <IconPaperclip/>
+                            </ThemeIcon>
+
+                            <span>
+                                {message.fileName}
+                            </span>
+                        </a>
+                    )
+                }
 
                 {
                     message.replyTo && (
@@ -40,7 +71,6 @@ export const Message = forwardRef<HTMLDivElement, { message: MessageModel } & HT
                                 {message.expand!.replyTo!.text}
                             </Html>
                         </CustomLink>
-
                     )
                 }
                 <div

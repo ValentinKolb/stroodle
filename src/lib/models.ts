@@ -40,6 +40,8 @@ export type MessageModel = {
     replyTo: string | null;
     systemMessage: boolean | null;
     link: string | null
+    file: string | null;
+    fileName: string | null;
     expand?: {
         author?: UserModel;
         project?: ProjectModel;

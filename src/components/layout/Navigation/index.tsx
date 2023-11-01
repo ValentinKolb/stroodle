@@ -1,8 +1,8 @@
-import {Box, Group, ThemeIcon, Title, UnstyledButton} from '@mantine/core';
+import {Box, Group, Image, Text, ThemeIcon, UnstyledButton} from '@mantine/core';
 import classes from './index.module.css';
 import SideNav from "./SideNav";
 import ActionSearch from "./ActionSearch";
-import {IconMenu2, IconMenuDeep} from "@tabler/icons-react";
+import {IconChevronLeft, IconChevronRight, IconMenuDeep} from "@tabler/icons-react";
 import {Outlet} from "react-router-dom";
 import {useSideMenuBar} from "../../../lib/uiUtil.tsx";
 import NotificationSubscription from "./NotificationSubscription";
@@ -19,20 +19,68 @@ export default function Navigation() {
         {/* Desktop Menu */}
         <header className={classes.header}>
             <Group gap={"xs"}>
+
                 <UnstyledButton onClick={toggleSideMenuBar}>
-                    <Group>
-                        <ThemeIcon
-                            aria-label={"Toggle sidebar"}
-                            variant="transparent"
-                        >
-                            {hideSideMenuBar ? <IconMenu2/> : <IconMenuDeep/>}
-                        </ThemeIcon>
-                    </Group>
+
+                    {hideSideMenuBar ?
+                        <Group gap={0}>
+                            <ThemeIcon
+                                aria-label={"Toggle sidebar"}
+                                variant="transparent"
+                                size={"md"}
+                                color={"teal"}
+                            >
+                                <IconMenuDeep/>
+                            </ThemeIcon>
+
+                            <ThemeIcon
+                                aria-label={"Toggle sidebar"}
+                                variant="transparent"
+                                size={"md"}
+                                color={"teal"}
+                            >
+                                <IconChevronRight/>
+                            </ThemeIcon>
+                        </Group>
+                        :
+                        <Group gap={0}>
+                            <ThemeIcon
+                                aria-label={"Toggle sidebar"}
+                                variant="transparent"
+                                size={"md"}
+                                color={"teal"}
+                            >
+                                <IconMenuDeep/>
+                            </ThemeIcon>
+
+                            <ThemeIcon
+                                aria-label={"Toggle sidebar"}
+                                variant="transparent"
+                                size={"md"}
+                                color={"teal"}
+                            >
+                                <IconChevronLeft/>
+                            </ThemeIcon>
+
+                        </Group>
+                    }
                 </UnstyledButton>
                 <CustomLink to={"/project"}>
-                    <Title c={"blue"} size={'xl'}>
-                        Stroodle.me
-                    </Title>
+                    <Group gap={"xs"}>
+                        <Image
+                            h={20}
+                            w={20}
+                            src={"/logo-square.svg"}
+                        />
+                        <Text
+                            fw={800}
+                            size={'xl'}
+                            variant="gradient"
+                            gradient={{from: 'blue', to: 'teal', deg: 90}}
+                        >
+                            Stroodle.me
+                        </Text>
+                    </Group>
                 </CustomLink>
             </Group>
             <ActionSearch/>

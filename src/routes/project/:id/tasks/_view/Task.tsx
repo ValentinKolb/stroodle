@@ -10,6 +10,7 @@ import {CustomLink} from "../../../../../components/layout/Navigation/Custom/Cus
 import Html from "../../../../../components/Html";
 import {formatTaskDate} from "../../../../../lib/dateUtil.ts";
 import {useSwitchSound, useTrashSound} from "../../../../../lib/sound.ts";
+import {htmlStringIsEmpty} from "../../../../../components/input/Editor";
 
 export default function Task({task}: { task: TaskModel }) {
 
@@ -55,9 +56,15 @@ export default function Task({task}: { task: TaskModel }) {
                 to={`/project/${task.project}/tasks/${task.id}`}
                 replace={false}
             >
-                <Html className={`${classes.description} one-line`}>
-                    {task.description}
-                </Html>
+                {htmlStringIsEmpty(task.description) ?
+                    <span className={`${classes.description} one-line`}>
+                    Beschreibung ...
+                </span>
+                    :
+                    <Html className={`${classes.description} one-line`}>
+                        {task.description}
+                    </Html>
+                }
             </CustomLink>
 
             {task.deadline &&

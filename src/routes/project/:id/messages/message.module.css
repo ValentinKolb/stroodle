@@ -20,7 +20,7 @@
     background-color: var(--message-bg-color);
 
     &[data-hightlight='true'] {
-        box-shadow: 0 0 5px 2px var(--message-bg-color-hover);
+        box-shadow: 0 0 5px 2px var(--mantine-color-yellow-5);
     }
 }
 
@@ -56,4 +56,20 @@
 
 .time {
     font-size: var(--mantine-font-size-xs);
+}
+
+.systemMessageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.systemMessage {
+    font-size: var(--mantine-font-size-xs);
+    padding: var(--mantine-spacing-xs);
+    border-radius: var(--mantine-radius-md);
+    background-color: var(--message-bg-color);
+    color: var(--message-text-color);
 }

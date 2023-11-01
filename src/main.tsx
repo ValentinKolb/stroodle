@@ -23,6 +23,9 @@ import ProjectOverview from "./routes/project";
 import NewProject from "./routes/project/new";
 import Project from "./routes/project/:id";
 import NotFound from "./components/NotFound.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import PWAPrompt from 'react-ios-pwa-prompt'
 
 const updateSW = registerSW({
     onNeedRefresh() {
@@ -58,10 +61,17 @@ const ProtectedRoutes = () => {
         return <CustomNavigate to={"/login"}/>
     }
     if (!user.verified) {
-        // todo: redirect to /account/confirm/verification but keep the token
         return <CustomNavigate to={`/account/confirm/verification${token ? "/" + token : ""}`}/>
     }
     return <>
+        <PWAPrompt
+            copyTitle="Stroodle.me installieren"
+            copyBody="Diese App kann auf deinem Home-Bildschirm installiert werden. So kannst du Stroodle.me wie eine App nutzen. Nutze dafür Safari und folge den Anweisungen."
+            copyShareButtonLabel="1) Klicke auf Teilen"
+            copyAddHomeButtonLabel="2) Klicke auf 'Zum Home-Bildschirm hinzufügen'"
+            copyClosePrompt="Abbrechen"
+            permanentlyHideOnDismiss={false}
+        />
         <Navigation/>
     </>
 }

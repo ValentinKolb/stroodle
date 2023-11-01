@@ -3,7 +3,7 @@ import {Notifications, notifications} from "@mantine/notifications";
 import '@mantine/notifications/styles.css';
 import {MessageModel, ProjectModel, UserModel} from "../../../../lib/models.ts";
 import Html from "../../../Html/index.tsx";
-import {BrandIconChat} from "../../../../lib/icons.tsx";
+import {BrandIconChat, BrandIconTask} from "../../../../lib/icons.tsx";
 import {IconChevronRight} from "@tabler/icons-react";
 import classes from "./index.module.css"
 import {scrollToMessage} from "../../../../routes/project/:id/messages/util.ts";
@@ -14,6 +14,7 @@ import ReactHowler from 'react-howler'
 import popSound from "/sounds/pop.mp3"
 import {useState} from "react";
 import {useMobile} from "../../../../lib/uiUtil.tsx";
+import {queryClient} from "../../../../main.tsx";
 
 export default function NotificationSubscription() {
 
@@ -28,6 +29,9 @@ export default function NotificationSubscription() {
     useSubscription<MessageModel>({
         idOrName: 'messages',
         callback: async (data) => {
+
+            await queryClient.invalidateQueries({queryKey: ["all", "messages"]})
+
             console.log(data)
             if (!user?.notifications) return
             const message = data.record
@@ -39,25 +43,30 @@ export default function NotificationSubscription() {
                     id: message.id,
                     title: (
                         <CustomLink
-                            to={link}
+                            to={message.link || link}
                             className={classes.title}
                             onClick={() => notifications.hide(message.id)}
+                            closeSideBar={isMobile}
                         >
-                            @{author.username}
-                            <IconChevronRight size={12}/>
+                            {!message.systemMessage && <>
+                                @{author.username}
+                                <IconChevronRight size={12}/>
+                            </>}
                             {project.name}
                         </CustomLink>
                     ),
                     message: (
                         <CustomLink
-                            to={link}
+                            to={message.link || link}
                             onClick={() => notifications.hide(message.id)}
+                            closeSideBar={isMobile}
                         >
                             <Html className={`one-line`}>{message.text}</Html>
                         </CustomLink>
                     ),
-                    icon: <BrandIconChat size={"xs"} color={"white"}/>,
-                    color: "messageColor",
+                    icon: message.systemMessage ? <BrandIconTask size={"xs"} color={"white"}/> :
+                        <BrandIconChat size={"xs"} color={"white"}/>,
+                    color: message.systemMessage ? "taskColor" : "messageColor",
                     autoClose: 1000,
                 })
                 if (user.sound) {

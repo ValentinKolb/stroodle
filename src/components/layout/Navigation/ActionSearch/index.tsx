@@ -1,15 +1,24 @@
 import {ActionIcon, Button, Code, Kbd, rem, Text} from '@mantine/core';
 import '@mantine/spotlight/styles.css';
 import {Spotlight, spotlight} from '@mantine/spotlight';
-import {IconForklift, IconMessagePlus, IconSearch, IconSquareCheck, IconSquarePlus} from '@tabler/icons-react';
+import {
+    IconForklift,
+    IconMessage,
+    IconMessagePlus,
+    IconPaperclip,
+    IconSearch,
+    IconSquareCheck,
+    IconSquarePlus
+} from '@tabler/icons-react';
 import {useState} from "react";
 import classes from './index.module.css';
 import {useParams} from "react-router-dom";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {ProjectModel, TaskModel} from "../../../../lib/models.ts";
+import {MessageModel, ProjectModel, TaskModel} from "../../../../lib/models.ts";
 import {useCustomNavigate} from "../Custom/util.ts";
 import Html from '../../../Html/index.tsx';
+import {useCreateTaskMutation} from "../../../../routes/project/:id/tasks/_view";
 
 
 export default function ActionSearch() {
@@ -22,20 +31,21 @@ export default function ActionSearch() {
     const navigate = useCustomNavigate()
 
     const parseMsg = {
-        match: query.match(/^>\s*(.*)/),
-        data: query.replace(/^>\s*/, "")
+        match: query.match(/^\s*>\s*(.*)/),
+        data: query.replace(/^\s*>\s*/, "")
     }
 
     const parseTask = {
-        match: query.match(/^-\s*(.*)/),
-        data: query.replace(/^-\s*/, "")
+        match: query.match(/^\s*-\s*(.*)/),
+        data: query.replace(/^\s*-\s*/, "")
     }
 
     const searchProjectQuery = useQuery({
         queryKey: ['search', 'project', query],
         queryFn: async () => {
+            const q = encodeURIComponent(query)
             return (await pb.collection('projects').getList<ProjectModel>(1, 5, {
-                filter: `name ~ "${query}"`,
+                filter: `name ~ "${q}"`,
             })).items
         },
         enabled: query.length > 0,
@@ -45,8 +55,36 @@ export default function ActionSearch() {
     const searchTaskQuery = useQuery({
         queryKey: ['search', 'task', query],
         queryFn: async () => {
+            const q = encodeURIComponent(query)
             return (await pb.collection('tasks').getList<TaskModel>(1, 5, {
-                filter: `description ~ "${query}"`,
+                filter: `description ~ "${q}"`,
+                expand: 'project'
+            })).items
+        },
+        enabled: query.length > 0,
+        retry: false
+    })
+
+    const searchMessagesQuery = useQuery({
+        queryKey: ['search', 'message', query],
+        queryFn: async () => {
+            const q = encodeURIComponent(query)
+            return (await pb.collection('messages').getList<MessageModel>(1, 5, {
+                filter: `text ~ "${q}" && systemMessage = false`,
+                expand: 'author,project'
+            })).items
+        },
+        enabled: query.length > 0,
+        retry: false
+    })
+
+    const searchFilesQuery = useQuery({
+        queryKey: ['search', 'file', query],
+        queryFn: async () => {
+            const q = encodeURIComponent(query)
+            return (await pb.collection('messages').getList<MessageModel>(1, 5, {
+                filter: `fileName ~ "${q}" && systemMessage = false`,
+                expand: 'author,project'
             })).items
         },
         enabled: query.length > 0,
@@ -63,13 +101,8 @@ export default function ActionSearch() {
         }
     })
 
-    const createTaskMutation = useMutation({
-        mutationFn: async () => {
-            return await pb.collection('tasks').create({
-                description: `<p>${parseTask.data}</p>`,
-                project: projectId,
-            })
-        }
+    const createTaskMutation = useCreateTaskMutation({
+        projectId: projectId!,
     })
 
     const newMsgAction = (msg?: string) => ({
@@ -88,7 +121,10 @@ export default function ActionSearch() {
         <Kbd size={"xs"}>{"-"}</Kbd> {task || "Aufgabe"}
     </span>,
         label: 'Aufgabe erstellen',
-        onClick: createTaskMutation.mutate,
+        onClick: () => createTaskMutation.mutate({
+            description: `<p>${parseMsg.data.replace(/^\s*-\s*/, "")}</p>`,
+            deadline: null
+        }),
         leftSection: IconSquarePlus,
     })
 
@@ -108,6 +144,7 @@ export default function ActionSearch() {
         } else {
             searchProjectQuery.refetch()
             searchTaskQuery.refetch()
+            searchMessagesQuery.refetch()
         }
     }
 
@@ -135,7 +172,7 @@ export default function ActionSearch() {
             }
             className={classes.searchResultContainer}
         >
-            {<IconForklift style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
+            {<IconForklift style={{minWidth: rem(24), minHeight: rem(24)}} stroke={1.5}/>}
             <Html className={`${classes.searchResult} one-line`}>{project.name}</Html>
         </Spotlight.Action>
     ))
@@ -148,13 +185,62 @@ export default function ActionSearch() {
             }
             className={classes.searchResultContainer}
         >
-            {<IconSquareCheck style={{width: rem(24), height: rem(24)}} stroke={1.5}/>}
+            {<IconSquareCheck style={{minWidth: rem(24), minHeight: rem(24)}} stroke={1.5}/>}
+
+            <Text>
+                {task.expand?.project?.name}
+            </Text>
+
             <Html className={`${classes.searchResult} one-line`}>{task.description}</Html>
         </Spotlight.Action>
     ))
 
+    const messageSearchResults = (searchMessagesQuery.data || []).map((message: MessageModel) => (
+        <Spotlight.Action
+            key={message.id}
+            onClick={
+                () => navigate(`/project/${message.project}/messages?scrollToId=${message.id}`)
+            }
+            className={classes.searchResultContainer}
+        >
+            {<IconMessage style={{minWidth: rem(24), minHeight: rem(24)}} stroke={1.5}/>}
 
-    const spotlightResults = [...items, ...projectSearchResults, ...taskSearchResults]
+            <Text>
+                @{message.expand!.author!.username} <span className={"dimmed"}>in</span> {message.expand?.project?.name}
+            </Text>
+
+            <Html className={`${classes.searchResult} one-line`}>{message.text}</Html>
+        </Spotlight.Action>
+    ))
+
+    const fileSearchResults = (searchFilesQuery.data || []).map((message: MessageModel) => (
+        <Spotlight.Action
+            key={message.id}
+            onClick={
+                () => navigate(`/project/${message.project}/messages?scrollToId=${message.id}`)
+            }
+            className={classes.searchResultContainer}
+        >
+            {<IconPaperclip style={{minWidth: rem(24), minHeight: rem(24)}} stroke={1.5}/>}
+
+            <Text style={{whiteSpace: "nowrap"}}>
+                @{message.expand!.author!.username} <span className={"dimmed"}>in</span> {message.expand?.project?.name}
+            </Text>
+
+            <Text truncate>
+                {message.fileName}
+            </Text>
+        </Spotlight.Action>
+    ))
+
+
+    const spotlightResults = [
+        ...items,
+        ...projectSearchResults,
+        ...taskSearchResults,
+        ...messageSearchResults,
+        ...fileSearchResults
+    ]
 
     return (
         <>

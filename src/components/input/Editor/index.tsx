@@ -72,9 +72,13 @@ export const cleanHtmlString = (s: string) =>
     )
 
 export const htmlStringIsEmpty = (s: string) => {
+    return textContent(s) === '';
+}
+
+export const textContent = (s: string) => {
     const tempElement = document.createElement('div');
     tempElement.innerHTML = s;
-    return tempElement.textContent === '';
+    return tempElement.textContent
 }
 
 /**

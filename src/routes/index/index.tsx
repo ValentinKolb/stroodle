@@ -1,4 +1,4 @@
-import {Box, Button, Image, List, rem, Text, ThemeIcon} from '@mantine/core'
+import {Box, Button, Group, Image, List, rem, Text, ThemeIcon} from '@mantine/core'
 import {IconCheck, IconForklift, IconLogin, IconUser, IconUserPlus} from '@tabler/icons-react'
 import {usePB} from "../../lib/pocketbase.tsx";
 
@@ -14,17 +14,24 @@ export default function Home() {
             <div className={classes.contentContainer}>
 
                 {/*Title*/}
-                <Box className={classes.title}>
-                    <Text span variant={"gradient"} gradient={{from: "cyan", to: "blue", deg: 45}} inherit>
-                        Stroodle
-                    </Text>
-                    <Text span c={"cyan"} inherit>
-                        {"."}
-                    </Text>
-                    <Text span variant={"gradient"} gradient={{from: "blue", to: "cyan", deg: 45}} inherit>
-                        me
-                    </Text>
-                </Box>
+                <Group>
+                    <Image
+                        src={"/logo-square.svg"}
+                        alt={"Stroodle Logo"}
+                        className={classes.titleImage}
+                    />
+                    <Box className={classes.title}>
+                        <Text span variant={"gradient"} gradient={{from: "cyan", to: "blue", deg: 45}} inherit>
+                            Stroodle
+                        </Text>
+                        <Text span c={"cyan"} inherit>
+                            {"."}
+                        </Text>
+                        <Text span variant={"gradient"} gradient={{from: "blue", to: "cyan", deg: 45}} inherit>
+                            me
+                        </Text>
+                    </Box>
+                </Group>
 
                 {/* Tablet & Mobile Image */}
                 <Image

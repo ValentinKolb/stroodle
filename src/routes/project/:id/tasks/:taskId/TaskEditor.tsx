@@ -1,7 +1,6 @@
 import {ProjectModel, TaskModel} from "../../../../../lib/models.ts";
 import {useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
 import {RichTextEditor, RichTextEditorContent} from "@mantine/tiptap";
 import classes from "./index.module.css";
 import {useMutation} from "@tanstack/react-query";
@@ -11,9 +10,12 @@ import {queryClient} from "../../../../../main.tsx";
 import MenuBar from "./MenuBar.tsx";
 import {cleanHtmlString} from "../../../../../components/input/Editor";
 import {useDraggable} from "react-use-draggable-scroll";
+import {Underline} from "@tiptap/extension-underline";
 
-
-export default function TaskEditor({task}: { project: ProjectModel, task: TaskModel }) {
+export default function TaskEditor({task}: {
+    project: ProjectModel,
+    task: TaskModel,
+}) {
 
     const {pb} = usePB()
 
@@ -33,10 +35,10 @@ export default function TaskEditor({task}: { project: ProjectModel, task: TaskMo
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['project', task.projectId, 'tasks', task.id]
+                queryKey: ["project", task.project, "tasks", task.id]
             }).then(() =>
                 queryClient.invalidateQueries({
-                    queryKey: ['project', task.projectId, 'tasks']
+                    queryKey: ['project', task.project, 'tasks']
                 }).then(() =>
                     console.log("invalidate", ['project', task.projectId, 'tasks', task.id])
                 )
@@ -44,11 +46,15 @@ export default function TaskEditor({task}: { project: ProjectModel, task: TaskMo
         }
     })
 
+    const extensions = [
+        StarterKit.configure({
+            history: false,
+        }),
+        Underline,
+    ]
+
     const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-        ],
+        extensions: extensions,
         editorProps: {
             attributes: {
                 id: editorId

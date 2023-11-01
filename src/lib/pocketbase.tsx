@@ -1,7 +1,7 @@
 import {createContext, DependencyList, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from "react"
 import PocketBase, {RecordSubscription} from 'pocketbase'
 import ms from "ms";
-import {useIdle, useInterval} from "@mantine/hooks";
+import {useInterval} from "@mantine/hooks";
 import jwtDecode from "jwt-decode";
 import {UserModel} from "./models.ts";
 
@@ -14,7 +14,6 @@ const PocketContext = createContext({})
 
 const PocketData = (baseUrl: string) => {
     const pb = useMemo(() => new PocketBase(baseUrl), [baseUrl])
-    const idle = useIdle(2000, {initialState: false})
 
     const [token, setToken] = useState(pb.authStore.token);
     const [user, setUser] = useState(pb.authStore.model);
@@ -29,11 +28,6 @@ const PocketData = (baseUrl: string) => {
     const refreshUser = useCallback(async () => {
         await pb.collection("users").authRefresh()
     }, [pb])
-
-    useEffect(() => {
-        if (!idle) return
-        refreshUser()
-    }, [refreshUser, idle])
 
     const register = useCallback(async (data: Pick<UserModel, "username" | "email" | "aboutMe" | "terms" | "jobTitle" | "notifications" | "sound"> & {
         password: string,

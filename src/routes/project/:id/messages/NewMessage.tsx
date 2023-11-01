@@ -3,12 +3,11 @@ import {useMutation} from "@tanstack/react-query";
 import TextEditor, {cleanHtmlString, htmlStringIsEmpty} from "../../../../components/input/Editor";
 import {usePB} from "../../../../lib/pocketbase.tsx";
 import {useHotkeys} from "@mantine/hooks";
-import {ActionIcon, ThemeIcon, Tooltip} from "@mantine/core";
-import {IconArrowForward, IconSend, IconX} from "@tabler/icons-react";
+import {ActionIcon, FileButton, Text, ThemeIcon, Tooltip} from "@mantine/core";
+import {IconArrowForward, IconPaperclip, IconSend, IconX} from "@tabler/icons-react";
 import {scrollToMessage} from "./util.ts";
 import Html from "../../../../components/Html";
 import classes from "./newMessage.module.css";
-import messageClasses from "./message.module.css";
 import {vibrateShort} from "../../../../lib/uiUtil.tsx";
 import {atom, useRecoilState} from "recoil";
 import {useState} from "react";
@@ -28,6 +27,7 @@ export default function NewMessage({project}: { project: ProjectModel }) {
 
     const [text, setText] = useState('')
     const [replyTo, setReplyTo] = useReplyTo()
+    const [file, setFile] = useState<File | null>(null)
 
     useHotkeys([
         ['mod+Enter', () => sendMessageMutation.mutate()],
@@ -39,22 +39,47 @@ export default function NewMessage({project}: { project: ProjectModel }) {
 
             return await pb.collection('messages').create({
                 text: cleanHtmlString(text),
-                replyTo: replyTo?.id || null,
                 author: user!.id,
                 project: project.id,
-                readBy: [user?.id]
+                file: file,
+                fileName: file?.name || null,
+                ...(replyTo && {
+                    replyTo: replyTo?.id,
+                })
             })
         },
         onSuccess: () => {
             vibrateShort()
             setText('')
             setReplyTo(null)
+            setFile(null)
         }
     })
 
     return <>
 
         <div className={classes.container}>
+
+            {
+                file &&
+                <div className={classes.replyTo}>
+                    <ThemeIcon variant={"transparent"} color={"blue"}>
+                        <IconPaperclip/>
+                    </ThemeIcon>
+
+                    <Text truncate className={classes.file}>
+                        {file.name}
+                    </Text>
+
+                    <ActionIcon
+                        variant={"transparent"}
+                        aria-label={"Remove File"}
+                        onClick={() => setFile(null)}
+                    >
+                        <IconX/>
+                    </ActionIcon>
+                </div>
+            }
 
             {
                 replyTo &&
@@ -65,7 +90,7 @@ export default function NewMessage({project}: { project: ProjectModel }) {
                     </ThemeIcon>
 
                     <Html
-                        className={`one-line ${messageClasses.message} ${classes.replyToText}`}
+                        className={`one-line ${classes.message} ${classes.replyToText}`}
                         onClick={() => scrollToMessage(replyTo!)}
                         data-author={replyTo.expand?.author?.id === user?.id}
                     >
@@ -88,6 +113,18 @@ export default function NewMessage({project}: { project: ProjectModel }) {
                     e.preventDefault()
                     sendMessageMutation.mutate()
                 }}>
+
+                <FileButton onChange={setFile}>
+                    {(props) => (
+                        <ActionIcon
+                            variant={"transparent"}
+                            aria-label={"Attach File(s)"}
+                            {...props}
+                        >
+                            <IconPaperclip/>
+                        </ActionIcon>
+                    )}
+                </FileButton>
 
                 <TextEditor
                     style={{flex: 1}}

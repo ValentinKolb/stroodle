@@ -33,3 +33,28 @@
     width: 100%;
     padding: var(--mantine-spacing-xs);
 }
+
+.message {
+    cursor: pointer;
+    transition: all 50ms ease-out;
+    padding: var(--mantine-spacing-sm);
+    border-radius: var(--mantine-radius-md);
+
+    color: var(--message-text-color);
+    background-color: var(--message-bg-color);
+
+    &:hover {
+        background-color: var(--message-bg-color-hover);
+    }
+}
+
+.file {
+    transition: all 50ms ease-out;
+    padding: var(--mantine-spacing-sm);
+    border-radius: var(--mantine-radius-md);
+
+    width: 100%;
+
+    color: var(--mantine-color-gray-8);
+    background-color: var(--mantine-color-gray-0);
+}
