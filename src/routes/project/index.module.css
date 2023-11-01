@@ -76,6 +76,8 @@
     font-size: var(--mantine-font-size-lg);
     font-weight: 600;
     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
     &:hover {
         text-decoration: underline;

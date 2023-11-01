@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Box, Collapse, Group, rem, Text, UnstyledButton} from '@mantine/core';
+import {Collapse, Group, rem, Text, UnstyledButton} from '@mantine/core';
 import {IconChevronRight} from '@tabler/icons-react';
 import classes from './index.module.css';
 import {ProjectModel} from "../../../../../lib/models.ts";
@@ -14,18 +14,17 @@ export default function ProjectLink({project}: { project: ProjectModel }) {
     return (
         <>
             <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
-                <Group justify="space-between" gap={0}>
-                    <Box style={{display: 'flex', alignItems: 'center'}}>
-                        <ProjectIcon
-                            radius="sm" size="sm"
-                            project={project}
-                        />
-                        <Box ml="md">{project.name}</Box>
-                    </Box>
+                <Group justify="space-between" gap={"xs"} style={{width: "100%"}}>
+                    <ProjectIcon
+                        radius="sm" size="sm"
+                        project={project}
+                    />
+                    <Text className={classes.projectName} truncate>{project.name}</Text>
                     <IconChevronRight
                         className={classes.chevron}
                         stroke={1.5}
                         style={{
+                            marginLeft: "auto",
                             width: rem(16),
                             height: rem(16),
                             transform: opened ? 'rotate(-90deg)' : 'none',

@@ -23,7 +23,7 @@ export default function ProjectView({project}: { project: ProjectModel }) {
 
         <FieldLink legend={"Beschreibung"} to={"e/desc"}>
             <Html>
-                {project.description ? project.description : "<p>Klicken, um eine Beschreibung hinzuzufügen ...</p"}
+                {project.description ? project.description : "<p>Klicken, um eine Beschreibung hinzuzufügen ...</p>"}
             </Html>
         </FieldLink>
 

@@ -49,6 +49,7 @@
 .sideNav {
     display: block;
     min-width: var(--side-nav-width);
+    max-width: var(--side-nav-width);
     transition: inherit;
     position: absolute;
     overflow: hidden;

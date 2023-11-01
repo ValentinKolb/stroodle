@@ -1,7 +1,8 @@
 .control {
     font-weight: 300;
     display: block;
-    width: 100%;
+    width: var(--side-nav-width);
+    overflow: hidden;
     padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
     color: var(--mantine-color-text);
     font-size: var(--mantine-font-size-sm);
@@ -30,4 +31,11 @@
 
 .chevron {
     transition: transform 200ms ease;
+}
+
+.projectName {
+    overflow: hidden;
+    max-width: calc(var(--side-nav-width) - 90px);
+    margin-right: auto;
+    color: var(--mantine-color-dimmed);
 }

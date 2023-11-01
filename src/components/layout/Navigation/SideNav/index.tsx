@@ -44,7 +44,7 @@ export default function SideNav() {
                 </CustomLink>
             </div>
 
-            <div className={"scrollbar"}>
+            <div className={"scrollbar"} style={{overflowX: "hidden"}}>
                 {
                     projectQuery.isPending ?
                         <Loader size={"sm"} ml={"md"} mt={"md"}/>
